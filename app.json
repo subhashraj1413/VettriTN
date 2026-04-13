@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Vettri TN",
+    "slug": "vettri-tn",
+    "scheme": "vettritn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.vettritn"
+    },
+    "android": {
+      "package": "com.vettritn"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

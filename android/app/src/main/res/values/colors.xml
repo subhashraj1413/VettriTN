@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Vettri TN — Android Color Resources
+  TVK Official Flag Colors:
+    Maroon-Red  → #C41E3A  (top & bottom of flag)
+    Golden Yellow → #F5C518  (center of flag)
+-->
+<resources>
+
+    <!-- ── TVK Brand Colors ─────────────────────────────────── -->
+    <color name="tvk_red">#C41E3A</color>
+    <color name="tvk_maroon">#8B0000</color>
+    <color name="tvk_yellow">#F5C518</color>
+    <color name="tvk_yellow_dark">#C9A000</color>
+    <color name="tvk_white">#FFFFFF</color>
+
+    <!-- ── Launch / Splash Screen ───────────────────────────── -->
+    <color name="splash_background">#C41E3A</color>
+    <color name="splash_accent">#F5C518</color>
+
+    <!-- ── App UI Colors ────────────────────────────────────── -->
+    <color name="primary">#C41E3A</color>
+    <color name="primary_dark">#8B0000</color>
+    <color name="primary_light">#FFE8EC</color>
+    <color name="accent">#F5C518</color>
+    <color name="accent_dark">#C9A000</color>
+
+    <!-- ── Status Bar ────────────────────────────────────────── -->
+    <color name="status_bar">#8B0000</color>
+
+    <!-- ── Navigation Bar ───────────────────────────────────── -->
+    <color name="navigation_bar">#FFFFFF</color>
+
+    <!-- ── Semantic ─────────────────────────────────────────── -->
+    <color name="success">#2E7D32</color>
+    <color name="warning">#E65100</color>
+    <color name="error">#B71C1C</color>
+    <color name="info">#1565C0</color>
+
+    <!-- ── Neutral ───────────────────────────────────────────── -->
+    <color name="background">#F7F7F7</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="border">#E8E8E8</color>
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#616161</color>
+    <color name="text_tertiary">#9E9E9E</color>
+    <color name="text_inverse">#FFFFFF</color>
+
+</resources>

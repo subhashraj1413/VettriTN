@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Vettri TN — Android Styles
+  Launch screen uses TVK Maroon-Red background with centered logo.
+  Status bar is TVK dark maroon for branding consistency.
+-->
+<resources>
+
+    <!-- ── Base App Theme ────────────────────────────────────── -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/tvk_maroon</item>
+        <item name="android:navigationBarColor">@color/navigation_bar</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <!-- ── Splash / Launch Screen Theme ─────────────────────── -->
+    <!--
+        Applied to MainActivity before React Native loads.
+        Shows TVK Red background with centered logo.
+        Switch back to AppTheme in MainActivity.onCreate() after
+        calling SplashScreen.hide() or setTheme(R.style.AppTheme).
+    -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:statusBarColor">@color/tvk_red</item>
+        <item name="android:navigationBarColor">@color/tvk_red</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowFullscreen">false</item>
+    </style>
+
+    <!--
+        Splash screen with bottom stripe pattern (mimics TVK flag).
+        Optional — use if you want the flag color bands at the bottom.
+    -->
+    <style name="SplashThemeWithFlag" parent="SplashTheme">
+        <item name="android:navigationBarColor">@color/tvk_maroon</item>
+    </style>
+
+</resources>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Vettri TN — iOS Info.plist
+  Status bar style: light (white icons on TVK red background)
+  Launch screen: LaunchScreen.storyboard
+-->
+<plist version="1.0">
+<dict>
+
+    <!-- ── App Identity ─────────────────────────────────────── -->
+    <key>CFBundleDisplayName</key>
+    <string>Vettri TN</string>
+
+    <key>CFBundleIdentifier</key>
+    <string>com.tvk.vettritn</string>
+
+    <key>CFBundleName</key>
+    <string>VettriTN</string>
+
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+
+    <key>CFBundleVersion</key>
+    <string>1</string>
+
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+
+    <!-- ── Launch Screen ─────────────────────────────────────── -->
+    <!-- Uses LaunchScreen.storyboard with TVK Red background -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+
+    <!-- ── Status Bar ────────────────────────────────────────── -->
+    <!-- Light content = white icons on TVK red background -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleLightContent</string>
+
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+
+    <!-- ── Orientations ──────────────────────────────────────── -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!-- ── Permissions ───────────────────────────────────────── -->
+    <key>NSCameraUsageDescription</key>
+    <string>Vettri TN needs camera access to attach photos to grievances and scan QR codes.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Vettri TN needs photo library access to attach documents and photos.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Vettri TN uses your location to auto-fill grievance location and find nearby services.</string>
+
+    <!-- ── Transport Security ─────────────────────────────────── -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+
+    <!-- ── React Native Config ────────────────────────────────── -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string></string>
+
+    <key>UIAppFonts</key>
+    <array></array>
+
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>arm64</string>
+    </array>
+
+</dict>
+</plist>

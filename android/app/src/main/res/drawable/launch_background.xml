@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Vettri TN — Android Launch Background
+  TVK Colors: Maroon-Red #C41E3A + Golden Yellow #F5C518
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- TVK Red background -->
+    <item android:drawable="@color/tvk_red" />
+
+    <!-- Centered app icon / logo placeholder -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher_round" />
+    </item>
+
+</layer-list>
