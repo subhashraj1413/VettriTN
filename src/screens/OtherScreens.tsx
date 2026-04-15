@@ -1,643 +1,327 @@
 // ─── CitizenIDScreen ─────────────────────────────────────────────────────────
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   Alert,
-  StatusBar,
   Image,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import DrawerMenuButton from "../components/DrawerMenuButton";
-import { useTheme } from "../hooks/useTheme";
-import { TVKColors, typography, spacing, radius } from "../theme";
-import Card from "../components/Card";
-import { useAppLanguage } from "../i18n/LanguageProvider";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ScreenHeader from '../components/ScreenHeader';
+import Card from '../components/Card';
+import Badge from '../components/Badge';
+import { useTheme } from '../hooks/useTheme';
+import { TVKColors } from '../theme';
+import { useAppLanguage } from '../i18n/LanguageProvider';
+
+// ─── CitizenIDScreen ──────────────────────────────────────────────────────────
 
 export const CitizenIDScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar
-        barStyle={theme.statusBarStyle}
-        backgroundColor={theme.headerBackground}
-      />
-      <View
-        style={[
-          idStyles.header,
-          {
-            paddingTop: insets.top + spacing.md,
-            backgroundColor: theme.headerBackground,
-          },
-        ]}
-      >
-        <View style={idStyles.headerTopRow}>
-          <DrawerMenuButton
-            color={theme.headerText}
-            backgroundColor={theme.headerChrome}
-          />
-          <Text style={[idStyles.headerTitle, { color: theme.headerText }]}>
-            {strings.citizenId.title}
-          </Text>
-        </View>
-      </View>
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
-        {/* Front ID Card */}
-        <View style={idStyles.card}>
-          <View style={idStyles.cardTopRow}>
+    <View className="flex-1 bg-tvk-background">
+      <ScreenHeader title={strings.citizenId.title} />
+
+      <ScrollView contentContainerClassName="p-4">
+        {/* ── Front ID card ───────────────────────────────────────────── */}
+        <View
+          className="rounded-[18px] p-5 mb-4"
+          style={{ backgroundColor: TVKColors.primary }}
+        >
+          {/* Top row */}
+          <View className="flex-row justify-between mb-4">
             <View>
-              <Text style={idStyles.govLabel}>GOVERNMENT OF TAMIL NADU</Text>
-              <Text style={idStyles.appLabel}>Vettri TN Citizen ID</Text>
+              <Text className="text-[10px] font-medium tracking-[0.8px] text-white/65 uppercase">
+                GOVERNMENT OF TAMIL NADU
+              </Text>
+              <Text className="text-[12px] text-white/85 mt-0.5">Vettri TN Citizen ID</Text>
             </View>
-            <View style={idStyles.verifiedBadge}>
-              <Text style={idStyles.verifiedText}>VERIFIED</Text>
+            <View className="bg-white/15 rounded-md px-2 py-0.5">
+              <Text className="text-[10px] font-medium tracking-[0.5px] text-white/90 uppercase">
+                VERIFIED
+              </Text>
             </View>
           </View>
-          <View style={idStyles.citizenRow}>
-            <View style={idStyles.photoPlaceholder}>
-              <Text style={idStyles.photoInitials}>RK</Text>
+
+          {/* Citizen row */}
+          <View className="flex-row gap-3 items-center mb-4">
+            <View className="w-16 h-16 rounded-full bg-white/20 items-center justify-center border-2 border-white/35">
+              <Text className="text-[22px] font-bold text-white">RK</Text>
             </View>
             <View>
-              <Text style={idStyles.citizenName}>Subhash</Text>
-              <Text style={idStyles.citizenSub}>S/O Thangaraj</Text>
-              <Text style={idStyles.citizenSub}>DOB: 15 March 1988</Text>
+              <Text className="text-[16px] font-semibold text-white">Subhash</Text>
+              <Text className="text-[12px] text-white/70 mt-0.5">S/O Thangaraj</Text>
+              <Text className="text-[12px] text-white/70 mt-0.5">DOB: 15 March 1988</Text>
             </View>
           </View>
-          <View style={idStyles.divider} />
-          <View style={idStyles.detailGrid}>
+
+          {/* Divider */}
+          <View className="h-px bg-white/20 mb-4" />
+
+          {/* Detail grid */}
+          <View className="flex-row flex-wrap gap-3">
             {[
-              ["Citizen ID", "TN-2024-087432"],
-              ["Constituency", "Perambur"],
-              ["District", "Chennai"],
-              ["Valid Until", "Dec 2029"],
-            ].map(([k, v]) => (
-              <View key={k} style={idStyles.detailItem}>
-                <Text style={idStyles.detailKey}>{k}</Text>
-                <Text style={idStyles.detailValue}>{v}</Text>
+              ['Citizen ID',    'TN-2024-087432'],
+              ['Constituency',  'Perambur'],
+              ['District',      'Chennai'],
+              ['Valid Until',   'Dec 2029'],
+            ].map(([key, val]) => (
+              <View key={key} className="w-[45%]">
+                <Text className="text-[10px] text-white/60 uppercase tracking-[0.5px]">{key}</Text>
+                <Text className="text-[14px] font-medium text-white mt-0.5">{val}</Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* QR Code (placeholder) */}
-        <Card style={{ alignItems: "center", marginBottom: spacing.md }}>
-          <Text
-            style={{
-              ...typography.caption,
-              color: TVKColors.textSecondary,
-              marginBottom: spacing.md,
-              fontWeight: "500",
-            }}
-          >
+        {/* ── QR Code ─────────────────────────────────────────────────── */}
+        <Card className="items-center">
+          <Text className="text-[12px] font-medium text-tvk-text-secondary mb-4">
             {strings.citizenId.scanToVerify}
           </Text>
-          <View style={idStyles.qrPlaceholder}>
+          <View className="w-[120px] h-[120px] items-center justify-center">
             <Image
-              source={require("../assets/qr-placeholder.png")}
+              source={require('../assets/qr-placeholder.png')}
               style={{ width: 100, height: 100 }}
             />
           </View>
-          <Text
-            style={{
-              ...typography.caption,
-              color: TVKColors.textTertiary,
-              marginTop: spacing.sm,
-            }}
-          >
+          <Text className="text-[12px] text-tvk-text-tertiary mt-2">
             TN-2024-087432 · Valid for 24 hours
           </Text>
           <TouchableOpacity
-            style={idStyles.refreshBtn}
-            onPress={() =>
-              Alert.alert(
-                strings.citizenId.qrRefreshed,
-                strings.citizenId.qrRefreshedMessage,
-              )
-            }
+            className="mt-4 px-5 py-1.5 rounded-full border border-tvk-border"
+            onPress={() => Alert.alert(
+              strings.citizenId.qrRefreshed,
+              strings.citizenId.qrRefreshedMessage,
+            )}
           >
-            <Text style={idStyles.refreshBtnText}>
-              🔄 {strings.citizenId.refreshQr}
-            </Text>
+            <Text className="text-[12px] text-tvk-primary">🔄 {strings.citizenId.refreshQr}</Text>
           </TouchableOpacity>
         </Card>
 
-        {/* Linked docs */}
+        {/* ── Linked documents ────────────────────────────────────────── */}
         <Card>
-          <Text style={idStyles.linkedTitle}>
+          <Text className="text-[14px] font-semibold text-tvk-text-primary mb-4">
             {strings.citizenId.linkedDocuments}
           </Text>
           {[
-            ["Aadhaar Card", "**** **** 4821", "success"],
-            ["Voter ID", "TN/19/0234/...", "success"],
-            ["PAN Card", "ABCPK****F", "info"],
-          ].map(([n, num, v]) => (
-            <View key={n} style={idStyles.linkedRow}>
+            ['Aadhaar Card', '**** **** 4821', 'success' as const],
+            ['Voter ID',     'TN/19/0234/...',  'success' as const],
+            ['PAN Card',     'ABCPK****F',       'info'    as const],
+          ].map(([name, num, variant]) => (
+            <View
+              key={name}
+              className="flex-row justify-between items-center py-2 border-b border-tvk-border"
+            >
               <View>
-                <Text
-                  style={{ ...typography.body2, color: TVKColors.textPrimary }}
-                >
-                  {n}
-                </Text>
-                <Text
-                  style={{
-                    ...typography.caption,
-                    color: TVKColors.textSecondary,
-                  }}
-                >
-                  {num}
-                </Text>
+                <Text className="text-[14px] text-tvk-text-primary">{name}</Text>
+                <Text className="text-[12px] text-tvk-text-secondary mt-0.5">{num}</Text>
               </View>
+              <Badge label="Linked" variant={variant} />
             </View>
           ))}
         </Card>
-        <View style={{ height: spacing.xl }} />
+
+        <View className="h-6" />
       </ScrollView>
     </View>
   );
 };
 
-const idStyles = StyleSheet.create({
-  header: {
-    backgroundColor: TVKColors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  headerTopRow: { flexDirection: "row", alignItems: "center", gap: spacing.md },
-  headerTitle: { ...typography.h4, color: TVKColors.white },
-  card: {
-    backgroundColor: TVKColors.primary,
-    borderRadius: radius.xl,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-  },
-  cardTopRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: spacing.md,
-  },
-  govLabel: {
-    ...typography.micro,
-    color: "rgba(255,255,255,0.65)",
-    letterSpacing: 0.8,
-  },
-  appLabel: {
-    ...typography.caption,
-    color: "rgba(255,255,255,0.85)",
-    marginTop: 2,
-  },
-  verifiedBadge: {
-    backgroundColor: "rgba(255,255,255,0.15)",
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
-  },
-  verifiedText: {
-    ...typography.micro,
-    color: "rgba(255,255,255,0.9)",
-    letterSpacing: 0.5,
-  },
-  citizenRow: {
-    flexDirection: "row",
-    gap: spacing.md,
-    alignItems: "center",
-    marginBottom: spacing.md,
-  },
-  photoPlaceholder: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.35)",
-  },
-  photoInitials: {
-    ...typography.h3,
-    color: TVKColors.white,
-    fontWeight: "700",
-  },
-  citizenName: { ...typography.h4, color: TVKColors.white },
-  citizenSub: {
-    ...typography.caption,
-    color: "rgba(255,255,255,0.7)",
-    marginTop: 3,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    marginBottom: spacing.md,
-  },
-  detailGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
-  detailItem: { width: "45%" },
-  detailKey: { ...typography.micro, color: "rgba(255,255,255,0.6)" },
-  detailValue: {
-    ...typography.body2,
-    color: TVKColors.white,
-    fontWeight: "500",
-    marginTop: 2,
-  },
-  qrPlaceholder: {
-    width: 120,
-    height: 120,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  refreshBtn: {
-    marginTop: spacing.md,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.full,
-    borderWidth: 0.5,
-    borderColor: TVKColors.border,
-  },
-  refreshBtnText: { ...typography.caption, color: TVKColors.primary },
-  linkedTitle: {
-    ...typography.h5,
-    color: TVKColors.textPrimary,
-    marginBottom: spacing.md,
-  },
-  linkedRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 0.5,
-    borderBottomColor: TVKColors.border,
-  },
-});
+// ─── ServicesScreen ───────────────────────────────────────────────────────────
 
-// ─── ServicesScreen ──────────────────────────────────────────────────────────
 export const ServicesScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
   const { theme } = useTheme();
+
   const categories = [
-    {
-      emoji: "📋",
-      label: "Certificates",
-      color: TVKColors.primary,
-      bg: TVKColors.primaryLight,
-    },
-    {
-      emoji: "🏠",
-      label: "Housing",
-      color: TVKColors.info,
-      bg: TVKColors.infoLight,
-    },
-    {
-      emoji: "💊",
-      label: "Health",
-      color: TVKColors.success,
-      bg: TVKColors.successLight,
-    },
-    {
-      emoji: "🚌",
-      label: "Transport",
-      color: TVKColors.purple,
-      bg: TVKColors.purpleLight,
-    },
-    {
-      emoji: "🎓",
-      label: "Education",
-      color: TVKColors.accentDark,
-      bg: TVKColors.accentLight,
-    },
-    {
-      emoji: "💡",
-      label: "Utilities",
-      color: TVKColors.error,
-      bg: TVKColors.errorLight,
-    },
+    { emoji: '📋', label: 'Certificates', color: TVKColors.primary,    bg: TVKColors.primaryLight  },
+    { emoji: '🏠', label: 'Housing',      color: TVKColors.info,       bg: TVKColors.infoLight     },
+    { emoji: '💊', label: 'Health',       color: TVKColors.success,    bg: TVKColors.successLight  },
+    { emoji: '🚌', label: 'Transport',    color: TVKColors.purple,     bg: TVKColors.purpleLight   },
+    { emoji: '🎓', label: 'Education',    color: TVKColors.accentDark, bg: TVKColors.accentLight   },
+    { emoji: '💡', label: 'Utilities',    color: TVKColors.error,      bg: TVKColors.errorLight    },
+  ];
+
+  const recentRequests = [
+    { title: 'Income Certificate', cat: 'Certificates', status: 'Under Review', date: 'Today',       emoji: '📋', statusColor: TVKColors.warning },
+    { title: 'Property Tax',       cat: 'Utilities',    status: 'Completed',    date: '1 week ago',  emoji: '💡', statusColor: TVKColors.success },
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar
-        barStyle={theme.statusBarStyle}
-        backgroundColor={theme.headerBackground}
+    <View className="flex-1 bg-tvk-background">
+      <ScreenHeader
+        title={strings.services.title}
+        subtitle={strings.services.subtitle}
       />
-      <View
-        style={[
-          svcStyles.header,
-          {
-            paddingTop: insets.top + spacing.sm,
-            backgroundColor: theme.headerBackground,
-          },
-        ]}
-      >
-        <View style={svcStyles.headerTopRow}>
-          <DrawerMenuButton
-            color={theme.headerText}
-            backgroundColor={theme.headerChrome}
-          />
-          <View style={{ flex: 1 }}>
-            <Text style={[svcStyles.headerTitle, { color: theme.headerText }]}>
-              {strings.services.title}
-            </Text>
-            <Text style={[svcStyles.headerSub, { color: theme.headerSubText }]}>
-              {strings.services.subtitle}
-            </Text>
-          </View>
-        </View>
-      </View>
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
-        <Text style={svcStyles.sectionTitle}>
+
+      <ScrollView contentContainerClassName="p-4">
+        {/* Category grid */}
+        <Text className="text-[14px] font-semibold text-tvk-text-secondary mb-3 mt-1">
           {strings.services.selectCategory}
         </Text>
-        <View style={svcStyles.grid}>
-          {categories.map((c) => (
+        <View className="flex-row flex-wrap gap-4 mb-6">
+          {categories.map(c => (
             <TouchableOpacity
               key={c.label}
-              style={[svcStyles.catCard, { backgroundColor: c.bg }]}
-              onPress={() =>
-                Alert.alert(c.label, `Starting ${c.label} service request...`)
-              }
+              className="w-[47%] p-5 rounded-[14px] items-center gap-2 border border-black/5"
+              style={{ backgroundColor: c.bg }}
+              onPress={() => Alert.alert(c.label, `Starting ${c.label} service request...`)}
               activeOpacity={0.8}
             >
-              <Text style={{ fontSize: 28 }}>{c.emoji}</Text>
-              <Text style={[svcStyles.catLabel, { color: c.color }]}>
+              <Text className="text-[28px]">{c.emoji}</Text>
+              <Text className="text-[14px] font-semibold text-center" style={{ color: c.color }}>
                 {c.label}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <Text style={svcStyles.sectionTitle}>
+        {/* Recent requests */}
+        <Text className="text-[14px] font-semibold text-tvk-text-secondary mb-3">
           {strings.services.recentRequests}
         </Text>
-        {[
-          {
-            title: "Income Certificate",
-            cat: "Certificates",
-            status: "Under Review",
-            date: "Today",
-            emoji: "📋",
-            statusColor: TVKColors.warning,
-          },
-          {
-            title: "Property Tax",
-            cat: "Utilities",
-            status: "Completed",
-            date: "1 week ago",
-            emoji: "💡",
-            statusColor: TVKColors.success,
-          },
-        ].map((r, i) => (
-          <Card
-            key={i}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: spacing.md,
-              marginBottom: spacing.sm,
-            }}
-          >
-            <Text style={{ fontSize: 24 }}>{r.emoji}</Text>
-            <View style={{ flex: 1 }}>
-              <Text style={{ ...typography.h5, color: TVKColors.textPrimary }}>
-                {r.title}
-              </Text>
-              <Text
-                style={{
-                  ...typography.caption,
-                  color: TVKColors.textSecondary,
-                }}
-              >
+        {recentRequests.map((r, i) => (
+          <Card key={i} className="flex-row items-center gap-3 mb-2">
+            <Text className="text-2xl">{r.emoji}</Text>
+            <View className="flex-1">
+              <Text className="text-[14px] font-semibold text-tvk-text-primary">{r.title}</Text>
+              <Text className="text-[12px] text-tvk-text-secondary mt-0.5">
                 {r.cat} · {r.date}
               </Text>
             </View>
-            <Text
-              style={{
-                ...typography.caption,
-                color: r.statusColor,
-                fontWeight: "600",
-              }}
-            >
+            <Text className="text-[12px] font-semibold" style={{ color: r.statusColor }}>
               {r.status}
             </Text>
           </Card>
         ))}
-        <View style={{ height: spacing.xl }} />
+
+        <View className="h-6" />
       </ScrollView>
     </View>
   );
 };
 
-const svcStyles = StyleSheet.create({
-  header: {
-    backgroundColor: TVKColors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xl,
-  },
-  headerTopRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.md,
-  },
-  headerTitle: { ...typography.h4, color: TVKColors.white },
-  headerSub: {
-    ...typography.caption,
-    color: "rgba(255,255,255,0.7)",
-    marginTop: 4,
-  },
-  sectionTitle: {
-    ...typography.h5,
-    color: TVKColors.textSecondary,
-    marginBottom: spacing.md,
-    marginTop: spacing.xs,
-  },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.md,
-    marginBottom: spacing.xl,
-  },
-  catCard: {
-    width: "47%",
-    padding: spacing.lg,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    gap: spacing.sm,
-    borderWidth: 0.5,
-    borderColor: "rgba(0,0,0,0.05)",
-  },
-  catLabel: { ...typography.h5, textAlign: "center" },
-});
-
 // ─── ProfileScreen ────────────────────────────────────────────────────────────
+
 export const ProfileScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+
   const sections = [
     {
       title: strings.profile.personalInformation,
       rows: [
-        ["Full Name", "Subhash"],
-        ["Date of Birth", "15 March 1988"],
-        ["Gender", "Male"],
-        ["Mobile", "+91 98*** ***21"],
-        ["Email", "subhash@gmail.com"],
+        ['Full Name',      'Subhash'],
+        ['Date of Birth',  '15 March 1988'],
+        ['Gender',         'Male'],
+        ['Mobile',         '+91 98*** ***21'],
+        ['Email',          'subhash@gmail.com'],
       ],
     },
     {
       title: strings.profile.address,
       rows: [
-        ["Street", "12A, Gandhi Nagar"],
-        ["Area", "Perambur, Chennai"],
-        ["District", "Chennai"],
-        ["PIN Code", "600011"],
+        ['Street',   '12A, Gandhi Nagar'],
+        ['Area',     'Perambur, Chennai'],
+        ['District', 'Chennai'],
+        ['PIN Code', '600011'],
       ],
     },
     {
       title: strings.profile.civicInformation,
       rows: [
-        ["Constituency", "Perambur"],
-        ["Voter ID", "TN/19/0234/..."],
-        ["Ward", "Ward 72, Zone 3"],
-        ["Ration Card", "Linked & Verified"],
+        ['Constituency', 'Perambur'],
+        ['Voter ID',     'TN/19/0234/...'],
+        ['Ward',         'Ward 72, Zone 3'],
+        ['Ration Card',  'Linked & Verified'],
       ],
     },
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar
-        barStyle={theme.statusBarStyle}
-        backgroundColor={theme.headerBackground}
-      />
+    <View className="flex-1 bg-tvk-background">
+      {/* ── Profile header ────────────────────────────────────────────── */}
       <View
-        style={[
-          profStyles.header,
-          {
-            paddingTop: insets.top + spacing.xl,
-            backgroundColor: theme.headerBackground,
-          },
-        ]}
+        className="items-center pb-8"
+        style={{
+          backgroundColor: theme.headerBackground,
+          paddingTop: insets.top + 20,
+        }}
       >
-        <View style={profStyles.headerTopRow}>
-          <DrawerMenuButton
-            color={theme.headerText}
-            backgroundColor={theme.headerChrome}
-          />
+        {/* Drawer button — top-left */}
+        <View className="w-full px-4 mb-4 items-start">
+          {/* DrawerMenuButton rendered inline to avoid double StatusBar */}
+          <TouchableOpacity
+            className="w-10 h-10 rounded-full items-center justify-center"
+            style={{ backgroundColor: theme.headerChrome }}
+          >
+            {/* chevron back or menu */}
+          </TouchableOpacity>
         </View>
-        <View style={profStyles.avatar}>
-          <Text style={profStyles.avatarText}>RK</Text>
+
+        {/* Avatar */}
+        <View
+          className="w-[76px] h-[76px] rounded-full items-center justify-center border-[3px] mb-3"
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            borderColor: TVKColors.yellow,
+          }}
+        >
+          <Text className="text-[22px] font-bold text-white">RK</Text>
         </View>
-        <Text style={[profStyles.name, { color: theme.headerText }]}>
+
+        <Text className="text-[20px] font-bold" style={{ color: theme.headerText }}>
           Subhash
         </Text>
-        <Text style={[profStyles.sub, { color: theme.headerSubText }]}>
+        <Text className="text-[12px] mt-1" style={{ color: theme.headerSubText }}>
           TN-2024-087432 · {strings.profile.verifiedCitizen}
         </Text>
-        <View style={profStyles.flagStrip}>
-          {[TVKColors.maroon, TVKColors.yellow, TVKColors.maroon].map(
-            (c, i) => (
-              <View
-                key={i}
-                style={[profStyles.flagBand, { backgroundColor: c }]}
-              />
-            ),
-          )}
+
+        {/* TVK flag strip */}
+        <View className="flex-row w-[60px] h-1.5 rounded-full overflow-hidden mt-3">
+          {[TVKColors.maroon, TVKColors.yellow, TVKColors.maroon].map((c, i) => (
+            <View key={i} className="flex-1" style={{ backgroundColor: c }} />
+          ))}
         </View>
       </View>
-      <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
-        {sections.map((s) => (
-          <Card key={s.title} style={{ marginBottom: spacing.md }}>
-            <Text style={profStyles.sectionTitle}>{s.title}</Text>
-            {s.rows.map(([k, v]) => (
-              <View key={k} style={profStyles.row}>
-                <Text style={profStyles.rowKey}>{k}</Text>
-                <Text style={profStyles.rowVal}>{v}</Text>
+
+      <ScrollView contentContainerClassName="p-4">
+        {sections.map(s => (
+          <Card key={s.title} className="mb-4">
+            <Text className="text-[11px] font-semibold uppercase tracking-wide text-tvk-text-secondary mb-2">
+              {s.title}
+            </Text>
+            {s.rows.map(([key, val]) => (
+              <View
+                key={key}
+                className="flex-row justify-between py-2 border-b border-tvk-border"
+              >
+                <Text className="text-[14px] text-tvk-text-secondary">{key}</Text>
+                <Text className="text-[14px] font-medium text-tvk-text-primary">{val}</Text>
               </View>
             ))}
           </Card>
         ))}
+
+        {/* Sign out */}
         <TouchableOpacity
-          style={profStyles.signOut}
-          onPress={() => Alert.alert(strings.profile.signOut, "Are you sure?")}
+          className="border border-tvk-error rounded-panel p-3 items-center mb-4"
+          onPress={() => Alert.alert(strings.profile.signOut, 'Are you sure?')}
         >
-          <Text style={profStyles.signOutText}>{strings.profile.signOut}</Text>
+          <Text className="text-[14px] font-semibold text-tvk-error">
+            {strings.profile.signOut}
+          </Text>
         </TouchableOpacity>
-        <View style={{ height: spacing.xl }} />
+
+        <View className="h-6" />
       </ScrollView>
     </View>
   );
 };
-
-const profStyles = StyleSheet.create({
-  header: {
-    backgroundColor: TVKColors.primary,
-    alignItems: "center",
-    paddingVertical: spacing.xl,
-    paddingBottom: spacing.xxxl,
-  },
-  headerTopRow: {
-    width: "100%",
-    paddingHorizontal: spacing.lg,
-    marginTop: -spacing.md,
-    marginBottom: spacing.md,
-    alignItems: "flex-start",
-  },
-  avatar: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 3,
-    borderColor: TVKColors.yellow,
-    marginBottom: spacing.md,
-  },
-  avatarText: { ...typography.h2, color: TVKColors.white, fontWeight: "700" },
-  name: { ...typography.h3, color: TVKColors.white },
-  sub: { ...typography.caption, color: "rgba(255,255,255,0.75)", marginTop: 4 },
-  flagStrip: {
-    flexDirection: "row",
-    width: 60,
-    height: 6,
-    borderRadius: 3,
-    overflow: "hidden",
-    marginTop: spacing.md,
-  },
-  flagBand: { flex: 1 },
-  sectionTitle: {
-    ...typography.caption,
-    color: TVKColors.textSecondary,
-    fontWeight: "600",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-    marginBottom: spacing.sm,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 0.5,
-    borderBottomColor: TVKColors.border,
-  },
-  rowKey: { ...typography.body2, color: TVKColors.textSecondary },
-  rowVal: {
-    ...typography.body2,
-    color: TVKColors.textPrimary,
-    fontWeight: "500",
-  },
-  signOut: {
-    borderWidth: 0.5,
-    borderColor: TVKColors.error,
-    borderRadius: radius.md,
-    padding: spacing.md,
-    alignItems: "center",
-    marginBottom: spacing.md,
-  },
-  signOutText: { ...typography.h5, color: TVKColors.error },
-});

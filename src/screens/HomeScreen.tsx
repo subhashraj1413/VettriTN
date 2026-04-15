@@ -11,6 +11,8 @@ import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import SectionTitle from '../components/SectionTitle';
+import ActivityItem from '../components/ActivityItem';
 import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 import { TVKColors } from '../theme';
@@ -255,12 +257,10 @@ const HomeScreen: React.FC = () => {
         </View>
 
         <View className="mt-6">
-          <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-[18px] font-bold text-tvk-ink">{strings.home.quickAccess}</Text>
-            <Text className="text-[12px] font-medium text-tvk-red">
-              {strings.home.digitalServices}
-            </Text>
-          </View>
+          <SectionTitle
+            title={strings.home.quickAccess}
+            action={strings.home.digitalServices}
+          />
 
           <View className="flex-row flex-wrap justify-between">
             {quickActions.map(a => (
@@ -312,35 +312,22 @@ const HomeScreen: React.FC = () => {
           <Ionicons name="sparkles-outline" size={18} color={TVKColors.yellow} />
         </TouchableOpacity>
 
-        <View className="mb-3 mt-6 flex-row items-center justify-between">
-          <Text className="text-[18px] font-bold text-tvk-ink">{strings.home.recentActivity}</Text>
-          <TouchableOpacity onPress={() => openRoute('/documents' as Href)} activeOpacity={0.8}>
-            <Text className="text-[12px] font-medium text-tvk-red">{strings.home.viewAll}</Text>
-          </TouchableOpacity>
-        </View>
+        <SectionTitle
+          title={strings.home.recentActivity}
+          action={strings.home.viewAll}
+          onAction={() => openRoute('/documents' as Href)}
+          className="mt-6"
+        />
 
         {recentActivity.map((a, i) => (
-          <View
+          <ActivityItem
             key={i}
-            className="mb-3 flex-row rounded-panel border bg-white p-4"
-            style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
-          >
-            <View
-              className="mr-3 h-11 w-11 items-center justify-center rounded-panel"
-              style={{ backgroundColor: `${a.color}18` }}
-            >
-              <Ionicons name={a.icon} size={19} color={a.color} />
-            </View>
-            <View className="flex-1">
-              <View className="flex-row items-start justify-between">
-                <Text className="mr-3 flex-1 text-[15px] font-semibold text-tvk-ink">
-                  {a.title}
-                </Text>
-                <Text className="text-[11px] font-medium text-tvk-muted">{a.time}</Text>
-              </View>
-              <Text className="mt-1 text-[13px] leading-[18px] text-tvk-muted">{a.sub}</Text>
-            </View>
-          </View>
+            title={a.title}
+            subtitle={a.sub}
+            time={a.time}
+            icon={a.icon}
+            color={a.color}
+          />
         ))}
 
         <View
