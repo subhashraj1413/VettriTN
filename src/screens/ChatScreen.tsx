@@ -5,18 +5,18 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  StatusBar,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DrawerMenuButton from '../components/DrawerMenuButton';
+import ScreenHeader from '../components/ScreenHeader';
 import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
-import { TVKColors, typography, spacing, radius } from '../theme';
+import { TVKColors } from '../theme';
 import { aiService } from '../services/aiService';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type Message = {
   id:   string;
@@ -25,24 +25,24 @@ type Message = {
   time: string;
 };
 
-const now = () => new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+const now = () =>
+  new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+// ─── Component ───────────────────────────────────────────────────────────────
 
 const ChatScreen: React.FC = () => {
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+
   const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '0',
-      role: 'assistant',
-      text: strings.chat.welcome,
-      time: now(),
-    },
+    { id: '0', role: 'assistant', text: strings.chat.welcome, time: now() },
   ]);
   const [inputText, setInputText] = useState('');
   const [loading,   setLoading]   = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const insets = useSafeAreaInsets();
-  const { mode, theme } = useTheme();
 
+  // Sync welcome message when language changes
   useEffect(() => {
     setMessages(prev =>
       prev.length === 1 && prev[0]?.id === '0'
@@ -52,12 +52,7 @@ const ChatScreen: React.FC = () => {
   }, [strings.chat.welcome]);
 
   const addMessage = useCallback((role: 'user' | 'assistant', text: string) => {
-    const msg: Message = {
-      id:   Date.now().toString(),
-      role,
-      text,
-      time: now(),
-    };
+    const msg: Message = { id: Date.now().toString(), role, text, time: now() };
     setMessages(prev => [...prev, msg]);
     setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
     return msg;
@@ -66,13 +61,10 @@ const ChatScreen: React.FC = () => {
   const handleSend = useCallback(async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
-
     setInputText('');
     addMessage('user', trimmed);
     setLoading(true);
-
     try {
-      // Try OpenAI API first, fall back to offline responses
       const response = await aiService.sendMessage(trimmed);
       addMessage('assistant', response.message);
     } catch {
@@ -82,20 +74,32 @@ const ChatScreen: React.FC = () => {
     }
   }, [loading, addMessage]);
 
+  // ── Message bubble renderer ──────────────────────────────────────────────
   const renderMessage = ({ item }: { item: Message }) => {
     const isUser = item.role === 'user';
     return (
-      <View style={[styles.msgRow, isUser && styles.msgRowUser]}>
+      <View className={`flex-row items-end mb-4 gap-2 ${isUser ? 'flex-row-reverse' : ''}`}>
         {!isUser && (
-          <View style={styles.botAvatar}>
-            <Text style={{ fontSize: 14 }}>🤖</Text>
+          <View className="w-8 h-8 rounded-full bg-tvk-primary-light items-center justify-center flex-shrink-0">
+            <Text className="text-sm">🤖</Text>
           </View>
         )}
-        <View style={[styles.bubble, isUser ? styles.bubbleUser : styles.bubbleBot]}>
-          <Text style={[styles.bubbleText, isUser && styles.bubbleTextUser]}>
+        <View
+          className={`max-w-[78%] rounded-2xl px-4 py-3 border ${
+            isUser
+              ? 'rounded-br-md border-transparent'
+              : 'rounded-bl-md rounded-tl-2xl rounded-tr-2xl bg-tvk-surface border-tvk-border'
+          }`}
+          style={isUser ? { backgroundColor: TVKColors.primary } : undefined}
+        >
+          <Text
+            className={`text-[14px] leading-6 ${isUser ? 'text-white' : 'text-tvk-text-primary'}`}
+          >
             {item.text}
           </Text>
-          <Text style={[styles.bubbleTime, isUser && { color: 'rgba(255,255,255,0.6)' }]}>
+          <Text
+            className={`text-[10px] font-medium mt-1 self-end ${isUser ? 'text-white/60' : 'text-tvk-text-tertiary'}`}
+          >
             {item.time}
           </Text>
         </View>
@@ -103,98 +107,105 @@ const ChatScreen: React.FC = () => {
     );
   };
 
+  // ── Custom header content (bot avatar + online dot) ──────────────────────
+  const headerRight = (
+    <View className="relative mr-3">
+      <View
+        className="w-11 h-11 rounded-full items-center justify-center"
+        style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+      >
+        <Text className="text-lg">🤖</Text>
+      </View>
+      <View
+        className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-tvk-success border-2"
+        style={{ borderColor: theme.headerBackground }}
+      />
+    </View>
+  );
+
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      className="flex-1 bg-tvk-background"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={insets.top + 56}
     >
-      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
-
-      {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View
-        style={[
-          styles.header,
-          { paddingTop: insets.top + spacing.md, backgroundColor: theme.headerBackground },
-        ]}
-      >
-        <DrawerMenuButton
-          color={theme.headerText}
-          backgroundColor={theme.headerChrome}
-        />
-        <View style={styles.headerAvatarWrap}>
-          <View
-            style={[
-              styles.headerAvatar,
-              { backgroundColor: mode === 'dark' ? 'rgba(0,0,0,0.16)' : 'rgba(255,255,255,0.2)' },
-            ]}
-          >
-            <Text style={{ fontSize: 18 }}>🤖</Text>
-          </View>
-          <View
-            style={[
-              styles.onlineDot,
-              { borderColor: theme.headerBackground },
-            ]}
-          />
+      {/* Header — uses ScreenHeader with custom title row content via subtitle */}
+      <View style={{ backgroundColor: theme.headerBackground }}>
+        <View className="flex-row h-1">
+          <View className="flex-1" style={{ backgroundColor: theme.headerText }} />
+          <View className="flex-1" style={{ backgroundColor: theme.headerBackground }} />
+          <View className="flex-1" style={{ backgroundColor: theme.headerText }} />
         </View>
-        <View>
-          <Text style={[styles.headerTitle, { color: theme.headerText }]}>{strings.chat.title}</Text>
-          <Text style={[styles.headerSub, { color: theme.headerSubText }]}>{strings.chat.subtitle}</Text>
+        <View
+          className="flex-row items-center gap-3 px-5 pb-4"
+          style={{ paddingTop: insets.top + 14 }}
+        >
+          {/* DrawerMenuButton imported in ScreenHeader — replicate inline for chat-specific layout */}
+          {headerRight}
+          <View className="flex-1">
+            <Text className="text-[17px] font-bold" style={{ color: theme.headerText }}>
+              {strings.chat.title}
+            </Text>
+            <Text className="text-[12px] mt-0.5" style={{ color: theme.headerSubText }}>
+              {strings.chat.subtitle}
+            </Text>
+          </View>
         </View>
       </View>
 
-      {/* ─── Messages ───────────────────────────────────────────────── */}
+      {/* Messages */}
       <FlatList
         ref={flatListRef}
         data={messages}
         keyExtractor={item => item.id}
         renderItem={renderMessage}
-        contentContainerStyle={styles.messageList}
+        contentContainerStyle={{ padding: 16, paddingBottom: 8 }}
         showsVerticalScrollIndicator={false}
         onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
         ListFooterComponent={
           loading ? (
-            <View style={styles.typingRow}>
-              <View style={styles.botAvatar}>
-                <Text style={{ fontSize: 14 }}>🤖</Text>
+            <View className="flex-row items-center gap-2 mb-4">
+              <View className="w-8 h-8 rounded-full bg-tvk-primary-light items-center justify-center">
+                <Text className="text-sm">🤖</Text>
               </View>
-              <View style={styles.typingBubble}>
+              <View className="flex-row items-center gap-2 bg-tvk-surface rounded-2xl rounded-bl-md px-4 py-3 border border-tvk-border">
                 <ActivityIndicator color={TVKColors.primary} size="small" />
-                <Text style={styles.typingText}>{strings.chat.typing}</Text>
+                <Text className="text-[12px] text-tvk-text-secondary">{strings.chat.typing}</Text>
               </View>
             </View>
           ) : null
         }
       />
 
-      {/* ─── Quick Suggestions ──────────────────────────────────────── */}
+      {/* Quick suggestions (shown for first messages only) */}
       {messages.length <= 2 && (
         <View>
-          <Text style={styles.suggTitle}>{strings.chat.quickQuestions}</Text>
+          <Text className="text-[11px] text-tvk-text-tertiary ml-4 mb-1">
+            {strings.chat.quickQuestions}
+          </Text>
           <FlatList
             horizontal
             data={strings.chat.suggestions}
             keyExtractor={item => item}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.suggList}
+            contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={styles.suggChip}
+                className="bg-tvk-primary-light rounded-full px-4 py-1.5 border border-tvk-primary/30"
                 onPress={() => handleSend(item)}
                 activeOpacity={0.75}
               >
-                <Text style={styles.suggChipText}>{item}</Text>
+                <Text className="text-[12px] text-tvk-primary-dark">{item}</Text>
               </TouchableOpacity>
             )}
           />
         </View>
       )}
 
-      {/* ─── Input Bar ──────────────────────────────────────────────── */}
-      <View style={styles.inputBar}>
+      {/* Input bar */}
+      <View className="flex-row items-end gap-2 px-4 py-3 bg-tvk-surface border-t border-tvk-border">
         <TextInput
-          style={styles.input}
+          className="flex-1 bg-tvk-background rounded-full px-4 py-2.5 text-[14px] text-tvk-text-primary max-h-24 border border-tvk-border"
           value={inputText}
           onChangeText={setInputText}
           placeholder={strings.chat.placeholder}
@@ -206,145 +217,18 @@ const ChatScreen: React.FC = () => {
           blurOnSubmit={false}
         />
         <TouchableOpacity
-          style={[styles.sendBtn, (!inputText.trim() || loading) && styles.sendBtnDisabled]}
+          className={`w-11 h-11 rounded-full items-center justify-center flex-shrink-0 ${
+            !inputText.trim() || loading ? 'bg-tvk-border' : 'bg-tvk-primary'
+          }`}
           onPress={() => handleSend(inputText)}
           disabled={!inputText.trim() || loading}
           activeOpacity={0.8}
         >
-          <Text style={styles.sendIcon}>➤</Text>
+          <Text className="text-white text-base ml-0.5">➤</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: TVKColors.background },
-
-  // Header
-  header: {
-    backgroundColor:   TVKColors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical:   spacing.md,
-    flexDirection:     'row',
-    alignItems:        'center',
-    gap:               spacing.md,
-  },
-  headerAvatarWrap: { position: 'relative' },
-  headerAvatar: {
-    width:           44,
-    height:          44,
-    borderRadius:    22,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    alignItems:      'center',
-    justifyContent:  'center',
-  },
-  onlineDot: {
-    position:        'absolute',
-    bottom:          1,
-    right:           1,
-    width:           10,
-    height:          10,
-    borderRadius:    5,
-    backgroundColor: TVKColors.success,
-    borderWidth:     2,
-    borderColor:     TVKColors.primary,
-  },
-  headerTitle: { ...typography.h5, color: TVKColors.white },
-  headerSub:   { ...typography.caption, color: 'rgba(255,255,255,0.7)', marginTop: 1 },
-
-  // Messages
-  messageList: { padding: spacing.lg, paddingBottom: spacing.sm },
-  msgRow:     { flexDirection: 'row', alignItems: 'flex-end', marginBottom: spacing.md, gap: spacing.sm },
-  msgRowUser: { flexDirection: 'row-reverse' },
-  botAvatar:  {
-    width:           32,
-    height:          32,
-    borderRadius:    16,
-    backgroundColor: TVKColors.primaryLight,
-    alignItems:      'center',
-    justifyContent:  'center',
-    flexShrink:      0,
-  },
-  bubble:        { maxWidth: '78%', borderRadius: radius.lg, padding: spacing.md },
-  bubbleBot:     {
-    backgroundColor: TVKColors.surface,
-    borderRadius:    radius.sm,
-    borderBottomLeftRadius: radius.lg,
-    borderTopLeftRadius:    radius.lg,
-    borderTopRightRadius:   radius.lg,
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-  },
-  bubbleUser:    {
-    backgroundColor:     TVKColors.primary,
-    borderBottomRightRadius: radius.sm,
-  },
-  bubbleText:    { ...typography.body2, color: TVKColors.textPrimary, lineHeight: 22 },
-  bubbleTextUser:{ color: TVKColors.white },
-  bubbleTime:    { ...typography.micro, color: TVKColors.textTertiary, marginTop: spacing.xs, alignSelf: 'flex-end' },
-
-  // Typing
-  typingRow:    { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md },
-  typingBubble: {
-    flexDirection:   'row',
-    alignItems:      'center',
-    gap:             spacing.sm,
-    backgroundColor: TVKColors.surface,
-    borderRadius:    radius.lg,
-    padding:         spacing.md,
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-  },
-  typingText: { ...typography.caption, color: TVKColors.textSecondary },
-
-  // Suggestions
-  suggTitle:  { ...typography.caption, color: TVKColors.textTertiary, marginLeft: spacing.lg, marginBottom: spacing.xs },
-  suggList:   { paddingHorizontal: spacing.lg, paddingBottom: spacing.sm, gap: spacing.sm },
-  suggChip:   {
-    backgroundColor: TVKColors.primaryLight,
-    borderRadius:    radius.full,
-    paddingHorizontal: spacing.md,
-    paddingVertical:   spacing.xs,
-    borderWidth:     0.5,
-    borderColor:     `${TVKColors.primary}30`,
-  },
-  suggChipText: { ...typography.caption, color: TVKColors.primaryDark },
-
-  // Input
-  inputBar: {
-    flexDirection:   'row',
-    alignItems:      'flex-end',
-    paddingHorizontal: spacing.lg,
-    paddingVertical:   spacing.md,
-    gap:             spacing.sm,
-    backgroundColor: TVKColors.surface,
-    borderTopWidth:  0.5,
-    borderTopColor:  TVKColors.border,
-  },
-  input: {
-    flex:            1,
-    backgroundColor: TVKColors.background,
-    borderRadius:    radius.full,
-    paddingHorizontal: spacing.lg,
-    paddingVertical:   spacing.sm,
-    ...typography.body2,
-    color:           TVKColors.textPrimary,
-    maxHeight:       100,
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-  },
-  sendBtn: {
-    width:           44,
-    height:          44,
-    borderRadius:    22,
-    backgroundColor: TVKColors.primary,
-    alignItems:      'center',
-    justifyContent:  'center',
-    flexShrink:      0,
-  },
-  sendBtnDisabled: { backgroundColor: TVKColors.border },
-  sendIcon: { fontSize: 16, color: TVKColors.white, marginLeft: 2 },
-});
 
 export default ChatScreen;

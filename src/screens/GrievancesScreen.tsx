@@ -4,21 +4,22 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  TextInput,
-  StyleSheet,
   Alert,
-  StatusBar,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import DrawerMenuButton from '../components/DrawerMenuButton';
-import { useTheme } from '../hooks/useTheme';
-import { TVKColors, typography, spacing, radius } from '../theme';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
 import PrimaryButton from '../components/PrimaryButton';
+import ScreenHeader from '../components/ScreenHeader';
+import ChipGroup, { ChipOption } from '../components/ChipGroup';
+import FormField from '../components/FormField';
+import EmptyState from '../components/EmptyState';
+import { TVKColors } from '../theme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 type GrievanceStatus = 'Filed' | 'Assigned' | 'Under Review' | 'Resolved';
+type Priority        = 'Normal' | 'Urgent' | 'Emergency';
 
 interface Grievance {
   id:       string;
@@ -29,6 +30,8 @@ interface Grievance {
   daysAgo:  string;
   progress: number;
 }
+
+// ─── Static data ─────────────────────────────────────────────────────────────
 
 const GRIEVANCES: Grievance[] = [
   {
@@ -53,15 +56,6 @@ const GRIEVANCES: Grievance[] = [
 
 const STATUS_STEPS: GrievanceStatus[] = ['Filed', 'Assigned', 'Under Review', 'Resolved'];
 
-const statusBadgeVariant = (s: GrievanceStatus) => {
-  switch (s) {
-    case 'Resolved':     return 'success';
-    case 'Under Review': return 'warning';
-    case 'Assigned':     return 'info';
-    default:             return 'neutral';
-  }
-};
-
 const CATEGORIES = [
   'Roads & Infrastructure',
   'Electricity & Lighting',
@@ -72,25 +66,39 @@ const CATEGORIES = [
   'Other',
 ];
 
+const PRIORITY_OPTIONS: ChipOption<Priority>[] = [
+  { value: 'Normal',    label: 'Normal' },
+  { value: 'Urgent',    label: 'Urgent' },
+  { value: 'Emergency', label: 'Emergency' },
+];
+
+const statusBadgeVariant = (s: GrievanceStatus) => {
+  switch (s) {
+    case 'Resolved':     return 'success' as const;
+    case 'Under Review': return 'warning' as const;
+    case 'Assigned':     return 'info' as const;
+    default:             return 'neutral' as const;
+  }
+};
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
 const GrievancesScreen: React.FC = () => {
-  const [activeTab,    setActiveTab]    = useState<'list' | 'new'>('list');
-  const [category,     setCategory]     = useState(CATEGORIES[0]);
-  const [description,  setDescription]  = useState('');
-  const [location,     setLocation]     = useState('');
-  const [priority,     setPriority]     = useState<'Normal' | 'Urgent' | 'Emergency'>('Normal');
-  const [submitted,    setSubmitted]    = useState(false);
-  const [submittedId,  setSubmittedId]  = useState('');
-  const insets = useSafeAreaInsets();
+  const [activeTab,   setActiveTab]   = useState<'list' | 'new'>('list');
+  const [category,    setCategory]    = useState(CATEGORIES[0]);
+  const [description, setDescription] = useState('');
+  const [location,    setLocation]    = useState('');
+  const [priority,    setPriority]    = useState<Priority>('Normal');
+  const [submitted,   setSubmitted]   = useState(false);
+  const [submittedId, setSubmittedId] = useState('');
   const { strings } = useAppLanguage();
-  const { mode, theme } = useTheme();
 
   const handleSubmit = () => {
     if (!description.trim() || !location.trim()) {
       Alert.alert(strings.grievances.requiredTitle, strings.grievances.requiredMessage);
       return;
     }
-    const newId = `GR-2024-${Math.floor(Math.random() * 900 + 100)}`;
-    setSubmittedId(newId);
+    setSubmittedId(`GR-2024-${Math.floor(Math.random() * 900 + 100)}`);
     setSubmitted(true);
   };
 
@@ -102,103 +110,95 @@ const GrievancesScreen: React.FC = () => {
     setActiveTab('list');
   };
 
-  return (
-    <View style={styles.root}>
-      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
-
-      {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View
-        style={[
-          styles.header,
-          { paddingTop: insets.top + spacing.sm, backgroundColor: theme.headerBackground },
-        ]}
-      >
-        <View style={styles.headerTopRow}>
-          <DrawerMenuButton
-            color={theme.headerText}
-            backgroundColor={theme.headerChrome}
-          />
-          <Text style={[styles.headerTitle, { color: theme.headerText }]}>
-            {strings.grievances.title}
+  // ── Tab pills rendered in the ScreenHeader bottom slot ─────────────────
+  const tabSlot = (
+    <View className="flex-row gap-2">
+      {(['list', 'new'] as const).map(tab => (
+        <TouchableOpacity
+          key={tab}
+          onPress={() => { setActiveTab(tab); setSubmitted(false); }}
+          className={`
+            px-5 py-1.5 rounded-full border
+            ${activeTab === tab
+              ? 'bg-white border-white/60'
+              : 'border-white/40 bg-transparent'}
+          `}
+        >
+          <Text
+            className={`text-[13px] ${activeTab === tab ? 'font-semibold text-tvk-primary' : 'text-white/80'}`}
+          >
+            {tab === 'list' ? strings.grievances.myGrievances : strings.grievances.new}
           </Text>
-        </View>
-        <View style={styles.tabs}>
-          {(['list', 'new'] as const).map(tab => (
-            <TouchableOpacity
-              key={tab}
-              style={[
-                styles.tab,
-                {
-                  borderColor: mode === 'dark' ? 'rgba(26,26,26,0.35)' : 'rgba(255,255,255,0.4)',
-                },
-                activeTab === tab &&
-                  (mode === 'dark'
-                    ? { backgroundColor: 'rgba(26,26,26,0.9)' }
-                    : styles.tabActive),
-              ]}
-              onPress={() => { setActiveTab(tab); setSubmitted(false); }}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  { color: mode === 'dark' ? 'rgba(26,26,26,0.82)' : 'rgba(255,255,255,0.8)' },
-                  activeTab === tab &&
-                    (mode === 'dark'
-                      ? { color: TVKColors.yellow, fontWeight: '600' }
-                      : styles.tabTextActive),
-                ]}
-              >
-                {tab === 'list' ? strings.grievances.myGrievances : strings.grievances.new}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
-      {activeTab === 'list' ? (
-        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          {/* Stats */}
-          <View style={styles.statsRow}>
+  return (
+    <View className="flex-1 bg-tvk-background">
+      <ScreenHeader title={strings.grievances.title} bottom={tabSlot} />
+
+      {/* ── LIST TAB ────────────────────────────────────────────────────── */}
+      {activeTab === 'list' && (
+        <ScrollView
+          className="flex-1"
+          contentContainerClassName="p-4"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Stats row */}
+          <View className="flex-row gap-3 mb-4">
             {[
               [strings.grievances.total, '2'],
               [strings.grievances.open, '1'],
               [strings.grievances.resolved, '1'],
-            ].map(([l, v]) => (
-              <View key={l} style={styles.statCard}>
-                <Text style={styles.statValue}>{v}</Text>
-                <Text style={styles.statLabel}>{l}</Text>
+            ].map(([label, value]) => (
+              <View
+                key={label}
+                className="flex-1 bg-tvk-surface rounded-panel items-center py-3 border border-tvk-border"
+              >
+                <Text className="text-[20px] font-bold text-tvk-primary">{value}</Text>
+                <Text className="text-[11px] text-tvk-text-secondary mt-0.5">{label}</Text>
               </View>
             ))}
           </View>
 
+          {/* Grievance cards */}
           {GRIEVANCES.map(g => (
-            <Card key={g.id} style={styles.grievanceCard}>
-              <View style={styles.grTopRow}>
-                <Text style={styles.grId}>{g.id}</Text>
-                <Badge label={g.status} variant={statusBadgeVariant(g.status) as any} />
+            <Card key={g.id}>
+              {/* Top row */}
+              <View className="flex-row justify-between items-center mb-2">
+                <Text className="text-[11px] text-tvk-text-tertiary">{g.id}</Text>
+                <Badge label={g.status} variant={statusBadgeVariant(g.status)} />
               </View>
 
-              <Text style={styles.grTitle}>{g.title}</Text>
-              <Text style={styles.grLocation}>{g.location}</Text>
+              <Text className="text-[15px] font-semibold text-tvk-text-primary mb-1">{g.title}</Text>
+              <Text className="text-[12px] text-tvk-text-secondary mb-3">{g.location}</Text>
 
-              <View style={styles.grMeta}>
-                <Text style={styles.grDept}>{g.dept}</Text>
-                <Text style={styles.grTime}>{g.daysAgo}</Text>
+              <View className="flex-row justify-between mb-3">
+                <Text className="text-[11px] text-tvk-text-tertiary">{g.dept}</Text>
+                <Text className="text-[11px] text-tvk-text-tertiary">{g.daysAgo}</Text>
               </View>
 
-              {/* Progress */}
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, {
-                  width: `${g.progress}%` as any,
-                  backgroundColor: g.status === 'Resolved' ? TVKColors.success : TVKColors.accent,
-                }]} />
+              {/* Progress bar */}
+              <View className="h-1.5 bg-tvk-border rounded-full overflow-hidden mb-2">
+                <View
+                  className="h-1.5 rounded-full"
+                  style={{
+                    width: `${g.progress}%`,
+                    backgroundColor: g.status === 'Resolved' ? TVKColors.success : TVKColors.accent,
+                  }}
+                />
               </View>
-              <View style={styles.stepsRow}>
+
+              {/* Step labels */}
+              <View className="flex-row justify-between">
                 {STATUS_STEPS.map((step, i) => {
-                  const stepIdx = STATUS_STEPS.indexOf(g.status);
-                  const done    = i <= stepIdx;
+                  const done = i <= STATUS_STEPS.indexOf(g.status);
                   return (
-                    <Text key={step} style={[styles.stepLabel, done && styles.stepLabelDone]}>
+                    <Text
+                      key={step}
+                      className={`text-[10px] font-medium ${done ? 'text-tvk-primary' : 'text-tvk-text-tertiary'}`}
+                    >
                       {step}
                     </Text>
                   );
@@ -206,243 +206,106 @@ const GrievancesScreen: React.FC = () => {
               </View>
             </Card>
           ))}
-          <View style={{ height: spacing.xl }} />
+
+          <View className="h-6" />
         </ScrollView>
-      ) : submitted ? (
-        /* ─── Success State ─────────────────────────────────────────── */
-        <View style={styles.successScreen}>
-          <View style={styles.successIcon}>
-            <Text style={{ fontSize: 36 }}>✅</Text>
-          </View>
-          <Text style={styles.successTitle}>{strings.grievances.filed}</Text>
-          <Text style={styles.successSub}>{strings.grievances.filedSub}</Text>
-          <View style={styles.successIdBox}>
-            <Text style={styles.successIdLabel}>{strings.grievances.referenceId}</Text>
-            <Text style={styles.successId}>{submittedId}</Text>
-          </View>
-          <Text style={styles.successEta}>{strings.grievances.eta}</Text>
-          <PrimaryButton
-            label={strings.grievances.viewMine}
-            onPress={resetForm}
-            style={{ marginTop: spacing.xl, width: 220 }}
-          />
-        </View>
-      ) : (
-        /* ─── New Grievance Form ────────────────────────────────────── */
-        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-          <Card>
-            <Text style={styles.formSection}>{strings.grievances.category}</Text>
-            <View style={styles.categoryList}>
-              {CATEGORIES.map(c => (
-                <TouchableOpacity
-                  key={c}
-                  style={[styles.categoryChip, category === c && styles.categoryChipActive]}
-                  onPress={() => setCategory(c)}
-                >
-                  <Text style={[styles.categoryChipText, category === c && styles.categoryChipTextActive]}>
-                    {c}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+      )}
+
+      {/* ── NEW GRIEVANCE / SUCCESS ──────────────────────────────────────── */}
+      {activeTab === 'new' && (
+        submitted ? (
+          /* Success state */
+          <View className="flex-1 items-center justify-center px-8">
+            <View className="w-20 h-20 rounded-full bg-tvk-success-light items-center justify-center mb-6">
+              <Text className="text-4xl">✅</Text>
             </View>
-
-            <Text style={styles.formSection}>{strings.grievances.description}</Text>
-            <TextInput
-              style={styles.textArea}
-              value={description}
-              onChangeText={setDescription}
-              placeholder={strings.grievances.descriptionPlaceholder}
-              placeholderTextColor={TVKColors.textTertiary}
-              multiline
-              numberOfLines={4}
-            />
-
-            <Text style={styles.formSection}>{strings.grievances.location}</Text>
-            <TextInput
-              style={styles.textInput}
-              value={location}
-              onChangeText={setLocation}
-              placeholder={strings.grievances.locationPlaceholder}
-              placeholderTextColor={TVKColors.textTertiary}
-            />
-
-            <Text style={styles.formSection}>{strings.grievances.priority}</Text>
-            <View style={styles.priorityRow}>
-              {(['Normal', 'Urgent', 'Emergency'] as const).map(p => (
-                <TouchableOpacity
-                  key={p}
-                  style={[styles.priorityBtn, priority === p && styles.priorityBtnActive]}
-                  onPress={() => setPriority(p)}
-                >
-                  <Text style={[styles.priorityBtnText, priority === p && styles.priorityBtnTextActive]}>
-                    {p === 'Normal'
-                      ? strings.grievances.normal
-                      : p === 'Urgent'
-                        ? strings.grievances.urgent
-                        : strings.grievances.emergency}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+            <Text className="text-[22px] font-bold text-tvk-text-primary mb-2 text-center">
+              {strings.grievances.filed}
+            </Text>
+            <Text className="text-[14px] text-tvk-text-secondary text-center leading-6 mb-6">
+              {strings.grievances.filedSub}
+            </Text>
+            <View className="bg-tvk-primary-light rounded-panel p-5 items-center w-full mb-4">
+              <Text className="text-[12px] text-tvk-text-secondary">{strings.grievances.referenceId}</Text>
+              <Text className="text-[20px] font-bold text-tvk-primary mt-1">{submittedId}</Text>
             </View>
-
-            <TouchableOpacity style={styles.attachRow}>
-              <Text style={{ fontSize: 16 }}>📎</Text>
-              <Text style={styles.attachText}>{strings.grievances.attachPhoto}</Text>
-            </TouchableOpacity>
-
+            <Text className="text-[12px] text-tvk-text-tertiary mb-8">{strings.grievances.eta}</Text>
             <PrimaryButton
-              label={strings.grievances.submit}
-              onPress={handleSubmit}
-              fullWidth
-              style={{ marginTop: spacing.md }}
+              label={strings.grievances.viewMine}
+              onPress={resetForm}
+              className="w-56"
             />
-          </Card>
-          <View style={{ height: spacing.xl }} />
-        </ScrollView>
+          </View>
+        ) : (
+          /* New grievance form */
+          <ScrollView
+            className="flex-1"
+            contentContainerClassName="p-4"
+            showsVerticalScrollIndicator={false}
+          >
+            <Card>
+              {/* Category */}
+              <ChipGroup
+                label={strings.grievances.category}
+                options={CATEGORIES.map(c => ({ value: c, label: c }))}
+                value={category}
+                onChange={setCategory}
+                wrap
+                className="mb-2"
+              />
+
+              {/* Description */}
+              <FormField
+                label={strings.grievances.description}
+                value={description}
+                onChangeText={setDescription}
+                placeholder={strings.grievances.descriptionPlaceholder}
+                multiline
+                numberOfLines={4}
+              />
+
+              {/* Location */}
+              <FormField
+                label={strings.grievances.location}
+                value={location}
+                onChangeText={setLocation}
+                placeholder={strings.grievances.locationPlaceholder}
+              />
+
+              {/* Priority */}
+              <ChipGroup
+                label={strings.grievances.priority}
+                options={PRIORITY_OPTIONS.map(p => ({
+                  value: p.value,
+                  label: p.value === 'Normal'
+                    ? strings.grievances.normal
+                    : p.value === 'Urgent'
+                      ? strings.grievances.urgent
+                      : strings.grievances.emergency,
+                }))}
+                value={priority}
+                onChange={p => setPriority(p as Priority)}
+                className="mb-4"
+              />
+
+              {/* Photo attach */}
+              <TouchableOpacity className="flex-row items-center gap-3 bg-tvk-background rounded-panel p-3 mb-3">
+                <Text className="text-base">📎</Text>
+                <Text className="text-[14px] text-tvk-text-secondary">{strings.grievances.attachPhoto}</Text>
+              </TouchableOpacity>
+
+              <PrimaryButton
+                label={strings.grievances.submit}
+                onPress={handleSubmit}
+                fullWidth
+              />
+            </Card>
+            <View className="h-6" />
+          </ScrollView>
+        )
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  root:   { flex: 1, backgroundColor: TVKColors.background },
-  scroll: { flex: 1 },
-  scrollContent: { padding: spacing.lg },
-
-  header: {
-    backgroundColor:   TVKColors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingTop:        spacing.sm,
-    paddingBottom:     spacing.lg,
-  },
-  headerTopRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.md },
-  headerTitle: { ...typography.h4, color: TVKColors.white },
-  tabs:        { flexDirection: 'row', gap: spacing.sm },
-  tab:         {
-    paddingHorizontal: spacing.lg,
-    paddingVertical:   spacing.xs,
-    borderRadius:      radius.full,
-    borderWidth:       1,
-    borderColor:       'rgba(255,255,255,0.4)',
-  },
-  tabActive:     { backgroundColor: TVKColors.white },
-  tabText:       { ...typography.caption, color: 'rgba(255,255,255,0.8)' },
-  tabTextActive: { color: TVKColors.primary, fontWeight: '600' },
-
-  // Stats
-  statsRow: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  statCard: {
-    flex:            1,
-    backgroundColor: TVKColors.surface,
-    borderRadius:    radius.md,
-    padding:         spacing.md,
-    alignItems:      'center',
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-  },
-  statValue: { ...typography.h3, color: TVKColors.primary },
-  statLabel: { ...typography.caption, color: TVKColors.textSecondary, marginTop: 2 },
-
-  // Grievance card
-  grievanceCard: { marginBottom: spacing.md },
-  grTopRow:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
-  grId:          { ...typography.caption, color: TVKColors.textTertiary },
-  grTitle:       { ...typography.h5, color: TVKColors.textPrimary, marginBottom: 4 },
-  grLocation:    { ...typography.caption, color: TVKColors.textSecondary, marginBottom: spacing.sm },
-  grMeta:        { flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.sm },
-  grDept:        { ...typography.caption, color: TVKColors.textTertiary },
-  grTime:        { ...typography.caption, color: TVKColors.textTertiary },
-
-  progressTrack: { height: 5, backgroundColor: TVKColors.border, borderRadius: 3, overflow: 'hidden', marginBottom: spacing.xs },
-  progressFill:  { height: 5, borderRadius: 3 },
-  stepsRow:      { flexDirection: 'row', justifyContent: 'space-between' },
-  stepLabel:     { ...typography.micro, color: TVKColors.textTertiary },
-  stepLabelDone: { color: TVKColors.primary, fontWeight: '500' },
-
-  // Success
-  successScreen: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xxxl },
-  successIcon:   {
-    width:           80,
-    height:          80,
-    borderRadius:    40,
-    backgroundColor: TVKColors.successLight,
-    alignItems:      'center',
-    justifyContent:  'center',
-    marginBottom:    spacing.xl,
-  },
-  successTitle: { ...typography.h2, color: TVKColors.textPrimary, marginBottom: spacing.sm, textAlign: 'center' },
-  successSub:   { ...typography.body2, color: TVKColors.textSecondary, textAlign: 'center', lineHeight: 24 },
-  successIdBox: {
-    backgroundColor: TVKColors.primaryLight,
-    borderRadius:    radius.md,
-    padding:         spacing.lg,
-    alignItems:      'center',
-    marginTop:       spacing.xl,
-    width:           '100%',
-  },
-  successIdLabel: { ...typography.caption, color: TVKColors.textSecondary },
-  successId:      { ...typography.h3, color: TVKColors.primary, marginTop: spacing.xs },
-  successEta:     { ...typography.caption, color: TVKColors.textTertiary, marginTop: spacing.lg },
-
-  // Form
-  formSection: { ...typography.caption, color: TVKColors.textSecondary, fontWeight: '600', marginBottom: spacing.sm, marginTop: spacing.md, textTransform: 'uppercase', letterSpacing: 0.5 },
-  textArea: {
-    backgroundColor: TVKColors.background,
-    borderRadius:    radius.md,
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-    padding:         spacing.md,
-    ...typography.body2,
-    color:           TVKColors.textPrimary,
-    height:          100,
-    textAlignVertical: 'top',
-    marginBottom:    spacing.sm,
-  },
-  textInput: {
-    backgroundColor: TVKColors.background,
-    borderRadius:    radius.md,
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-    padding:         spacing.md,
-    ...typography.body2,
-    color:           TVKColors.textPrimary,
-    marginBottom:    spacing.sm,
-  },
-  categoryList: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginBottom: spacing.sm },
-  categoryChip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical:   spacing.xs,
-    borderRadius:      radius.full,
-    borderWidth:       0.5,
-    borderColor:       TVKColors.border,
-    backgroundColor:   TVKColors.background,
-  },
-  categoryChipActive:     { backgroundColor: TVKColors.primaryLight, borderColor: TVKColors.primary },
-  categoryChipText:       { ...typography.caption, color: TVKColors.textSecondary },
-  categoryChipTextActive: { color: TVKColors.primary, fontWeight: '600' },
-  priorityRow:            { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
-  priorityBtn: {
-    flex:            1,
-    padding:         spacing.sm,
-    borderRadius:    radius.md,
-    alignItems:      'center',
-    borderWidth:     0.5,
-    borderColor:     TVKColors.border,
-    backgroundColor: TVKColors.surface,
-  },
-  priorityBtnActive:     { backgroundColor: TVKColors.primaryLight, borderColor: TVKColors.primary },
-  priorityBtnText:       { ...typography.caption, color: TVKColors.textSecondary },
-  priorityBtnTextActive: { color: TVKColors.primary, fontWeight: '600' },
-  attachRow: {
-    flexDirection:   'row',
-    alignItems:      'center',
-    gap:             spacing.sm,
-    backgroundColor: TVKColors.background,
-    borderRadius:    radius.md,
-    padding:         spacing.md,
-    marginBottom:    spacing.sm,
-  },
-  attachText: { ...typography.body2, color: TVKColors.textSecondary },
-});
 
 export default GrievancesScreen;

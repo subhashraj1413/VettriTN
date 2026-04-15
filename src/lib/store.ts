@@ -2,10 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { authReducer } from '../features/auth/store/auth.store';
+import { certificatesReducer } from '../features/certificates/store/certificates.store';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth:         authReducer,
+    certificates: certificatesReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
