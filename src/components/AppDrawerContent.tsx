@@ -13,113 +13,74 @@ import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 
 type DrawerItem = {
-  label: string;
-  href: Href;
-  icon: keyof typeof Ionicons.glyphMap;
+  label:      string;
+  href:       Href;
+  icon:       keyof typeof Ionicons.glyphMap;
   activeIcon: keyof typeof Ionicons.glyphMap;
-  match: string[];
+  match:      string[];
 };
 
+/**
+ * Side-drawer navigation content.
+ * Fully rewritten to use NativeWind className.
+ * Dynamic theme colours kept as inline `style` props only where necessary.
+ */
 export default function AppDrawerContent(props: DrawerContentComponentProps) {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
   const { language, setLanguage, strings } = useAppLanguage();
   const { signOut } = useSession();
   const { mode, setMode, theme } = useTheme();
-
   const isDark = mode === 'dark';
 
   const navItems: DrawerItem[] = [
-    {
-      label: strings.routes.home,
-      href: '/' as Href,
-      icon: 'home-outline',
-      activeIcon: 'home',
-      match: ['/', '/(tabs)'],
-    },
-    {
-      label: strings.routes.documents,
-      href: '/documents' as Href,
-      icon: 'document-text-outline',
-      activeIcon: 'document-text',
-      match: ['/documents'],
-    },
-    {
-      label: strings.routes.chat,
-      href: '/chat' as Href,
-      icon: 'chatbubble-ellipses-outline',
-      activeIcon: 'chatbubble-ellipses',
-      match: ['/chat'],
-    },
-    {
-      label: strings.routes.grievances,
-      href: '/grievances' as Href,
-      icon: 'alert-circle-outline',
-      activeIcon: 'alert-circle',
-      match: ['/grievances'],
-    },
-    {
-      label: strings.routes.schemes,
-      href: '/schemes' as Href,
-      icon: 'ribbon-outline',
-      activeIcon: 'ribbon',
-      match: ['/schemes'],
-    },
-    {
-      label: strings.routes.citizenId,
-      href: '/citizen-id' as Href,
-      icon: 'card-outline',
-      activeIcon: 'card',
-      match: ['/citizen-id'],
-    },
-    {
-      label: strings.routes.services,
-      href: '/services' as Href,
-      icon: 'grid-outline',
-      activeIcon: 'grid',
-      match: ['/services'],
-    },
+    { label: strings.routes.home,       href: '/' as Href,           icon: 'home-outline',               activeIcon: 'home',               match: ['/', '/(tabs)'] },
+    { label: strings.routes.documents,  href: '/documents' as Href,   icon: 'document-text-outline',      activeIcon: 'document-text',      match: ['/documents'] },
+    { label: strings.routes.chat,       href: '/chat' as Href,        icon: 'chatbubble-ellipses-outline', activeIcon: 'chatbubble-ellipses', match: ['/chat'] },
+    { label: strings.routes.grievances, href: '/grievances' as Href,  icon: 'alert-circle-outline',       activeIcon: 'alert-circle',       match: ['/grievances'] },
+    { label: strings.routes.schemes,    href: '/schemes' as Href,     icon: 'ribbon-outline',             activeIcon: 'ribbon',             match: ['/schemes'] },
+    { label: strings.routes.citizenId,  href: '/citizen-id' as Href,  icon: 'card-outline',               activeIcon: 'card',               match: ['/citizen-id'] },
+    { label: strings.routes.services,   href: '/services' as Href,    icon: 'grid-outline',               activeIcon: 'grid',               match: ['/services'] },
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background }}>
+    <View className="flex-1" style={{ backgroundColor: theme.background }}>
 
-      {/* ── Header ─────────────────────────────────────────── */}
+      {/* ── Header ──────────────────────────────────────────────────────── */}
       <View
+        className="px-5 pb-6"
         style={{
           backgroundColor: theme.accent,
           paddingTop: insets.top + 10,
-          paddingHorizontal: 20,
-          paddingBottom: 24,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+        <View className="flex-row items-center gap-2.5 mb-1.5">
           <View
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            className="w-9 h-9 rounded-[10px] items-center justify-center"
+            style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
           >
             <Ionicons name="shield-checkmark" size={20} color={theme.onAccent} />
           </View>
-          <Text style={{ color: theme.onAccent, fontSize: 20, fontWeight: '800', letterSpacing: 0.2 }}>
+          <Text
+            className="text-[20px] font-extrabold tracking-[0.2px]"
+            style={{ color: theme.onAccent }}
+          >
             {strings.drawer.title}
           </Text>
         </View>
-        <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, marginLeft: 48 }}>
+        <Text
+          className="text-[13px] ml-[46px]"
+          style={{ color: 'rgba(255,255,255,0.7)' }}
+        >
           {strings.drawer.subtitle}
         </Text>
       </View>
 
-      {/* ── Nav items (scrollable) ──────────────────────────── */}
+      {/* ── Nav items ───────────────────────────────────────────────────── */}
       <DrawerContentScrollView
         {...props}
         bounces={false}
-        style={{ flex: 1 }}
+        className="flex-1"
         contentContainerStyle={{ paddingTop: 8, paddingBottom: 8 }}
       >
         {navItems.map(item => {
@@ -134,67 +95,36 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
                 router.push(item.href);
                 props.navigation.closeDrawer();
               }}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingRight: 16,
-                paddingLeft: 0,
-                paddingVertical: 4,
-                marginBottom: 2,
-              }}
+              className="flex-row items-center pr-4 py-1 mb-0.5"
             >
               {/* Active left-bar indicator */}
               <View
-                style={{
-                  width: 3,
-                  height: 44,
-                  borderRadius: 2,
-                  backgroundColor: active ? theme.accent : 'transparent',
-                  marginRight: 13,
-                }}
+                className="w-[3px] h-11 rounded-sm mr-3"
+                style={{ backgroundColor: active ? theme.accent : 'transparent' }}
               />
 
               {/* Icon badge */}
               <View
+                className="w-10 h-10 rounded-xl items-center justify-center mr-3.5"
                 style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 12,
                   backgroundColor: active
-                    ? theme.accent + '18'
+                    ? `${theme.accent}18`
                     : isChat
                       ? isDark ? 'rgba(255,200,0,0.10)' : 'rgba(196,30,58,0.07)'
                       : theme.surface,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: 14,
                 }}
               >
                 <Ionicons
                   name={active ? item.activeIcon : item.icon}
                   size={21}
-                  color={
-                    active
-                      ? theme.accent
-                      : isChat
-                        ? theme.accent
-                        : theme.secondaryText
-                  }
+                  color={active ? theme.accent : isChat ? theme.accent : theme.secondaryText}
                 />
-                {/* AI sparkle badge */}
+
+                {/* AI sparkle badge on Chat */}
                 {isChat && (
                   <View
-                    style={{
-                      position: 'absolute',
-                      top: -3,
-                      right: -3,
-                      width: 14,
-                      height: 14,
-                      borderRadius: 7,
-                      backgroundColor: theme.accent,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
+                    className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full items-center justify-center"
+                    style={{ backgroundColor: theme.accent }}
                   >
                     <Ionicons name="sparkles" size={8} color={theme.onAccent} />
                   </View>
@@ -202,12 +132,10 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
               </View>
 
               <Text
+                className="flex-1 text-[15px] tracking-[0.1px]"
                 style={{
-                  flex: 1,
-                  fontSize: 15,
                   fontWeight: active ? '700' : '400',
                   color: active ? theme.accent : theme.primaryText,
-                  letterSpacing: 0.1,
                 }}
               >
                 {item.label}
@@ -221,62 +149,42 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
         })}
       </DrawerContentScrollView>
 
-      {/* ── Footer — 4 items ───────────────────────────────── */}
+      {/* ── Footer ──────────────────────────────────────────────────────── */}
       <View
+        className="border-t"
         style={{
-          borderTopWidth: 1,
-          borderTopColor: theme.border,
-          backgroundColor: theme.surface,
-          paddingBottom: Math.max(insets.bottom, 16),
+          borderTopColor:    theme.border,
+          backgroundColor:   theme.surface,
+          paddingBottom:     Math.max(insets.bottom, 16),
         }}
       >
-        {/* 1. Language */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 20,
-            paddingTop: 16,
-            paddingBottom: 10,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        {/* 1. Language toggle */}
+        <View className="flex-row items-center justify-between px-5 pt-4 pb-2.5">
+          <View className="flex-row items-center gap-2.5">
             <Ionicons name="language-outline" size={18} color={theme.secondaryText} />
-            <Text style={{ fontSize: 13, fontWeight: '500', color: theme.primaryText }}>
+            <Text className="text-[13px] font-medium" style={{ color: theme.primaryText }}>
               {strings.drawer.language}
             </Text>
           </View>
           <View
-            style={{
-              flexDirection: 'row',
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: theme.border,
-              overflow: 'hidden',
-            }}
+            className="flex-row rounded-lg border overflow-hidden"
+            style={{ borderColor: theme.border }}
           >
             {([
-              { code: 'en', label: strings.drawer.english },
-              { code: 'ta', label: strings.drawer.tamil },
-            ] as const).map(opt => {
-              const active = language === opt.code;
+              { code: 'en' as const, label: strings.drawer.english },
+              { code: 'ta' as const, label: strings.drawer.tamil },
+            ]).map(opt => {
+              const langActive = language === opt.code;
               return (
                 <TouchableOpacity
                   key={opt.code}
                   onPress={() => setLanguage(opt.code)}
-                  style={{
-                    paddingHorizontal: 14,
-                    paddingVertical: 7,
-                    backgroundColor: active ? theme.accent : 'transparent',
-                  }}
+                  className="px-3.5 py-1.5"
+                  style={{ backgroundColor: langActive ? theme.accent : 'transparent' }}
                 >
                   <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: '700',
-                      color: active ? theme.onAccent : theme.secondaryText,
-                    }}
+                    className="text-[12px] font-bold"
+                    style={{ color: langActive ? theme.onAccent : theme.secondaryText }}
                   >
                     {opt.label}
                   </Text>
@@ -286,30 +194,22 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
           </View>
         </View>
 
-        {/* 2. Theme toggle */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-          }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        {/* 2. Dark / light theme toggle */}
+        <View className="flex-row items-center justify-between px-5 py-2.5">
+          <View className="flex-row items-center gap-2.5">
             <Ionicons
               name={isDark ? 'moon-outline' : 'sunny-outline'}
               size={18}
               color={theme.secondaryText}
             />
-            <Text style={{ fontSize: 13, fontWeight: '500', color: theme.primaryText }}>
+            <Text className="text-[13px] font-medium" style={{ color: theme.primaryText }}>
               {isDark ? strings.drawer.dark : strings.drawer.light}
             </Text>
           </View>
           <Switch
             value={isDark}
             onValueChange={v => setMode(v ? 'dark' : 'light')}
-            trackColor={{ false: theme.border, true: theme.accent + 'CC' }}
+            trackColor={{ false: theme.border, true: `${theme.accent}CC` }}
             thumbColor={isDark ? theme.accent : '#FFFFFF'}
             ios_backgroundColor={theme.border}
           />
@@ -322,21 +222,15 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
             router.push('/profile' as Href);
             props.navigation.closeDrawer();
           }}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 10,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-          }}
+          className="flex-row items-center gap-2.5 px-5 py-2.5"
         >
           <Ionicons name="person-circle-outline" size={18} color={theme.secondaryText} />
-          <Text style={{ fontSize: 13, fontWeight: '500', color: theme.primaryText }}>
+          <Text className="text-[13px] font-medium" style={{ color: theme.primaryText }}>
             {strings.routes.profile}
           </Text>
         </TouchableOpacity>
 
-        {/* 4. Sign Out */}
+        {/* 4. Sign out */}
         <TouchableOpacity
           activeOpacity={0.75}
           onPress={() => {
@@ -344,16 +238,10 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
             props.navigation.closeDrawer();
             router.replace('/login' as Href);
           }}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 10,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-          }}
+          className="flex-row items-center gap-2.5 px-5 py-2.5"
         >
           <Ionicons name="log-out-outline" size={18} color="#C62828" />
-          <Text style={{ fontSize: 13, fontWeight: '600', color: '#C62828' }}>
+          <Text className="text-[13px] font-semibold text-[#C62828]">
             {strings.drawer.signOut}
           </Text>
         </TouchableOpacity>
