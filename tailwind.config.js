@@ -6,25 +6,25 @@ module.exports = {
     extend: {
       colors: {
         tvk: {
-          red: '#C41E3A',
+          red: '#9F0000',
           maroon: '#8B0000',
           gold: '#F5C518',
           amber: '#C9A000',
-          blush: '#FFE8EC',
+          blush: '#FBE8E8',
           cream: '#FFF8E1',
-          paper: '#FFFDF8',
-          mist: '#FFF4F6',
+          paper: '#F4F6FA',
+          mist: '#FFF1F4',
           ink: '#1A1A1A',
-          muted: '#6B6570',
-          border: '#ECD9DE',
+          muted: '#5D6776',
+          border: '#DDE3EA',
           success: '#2E7D32',
           info: '#1565C0',
           warning: '#E65100',
         },
       },
       boxShadow: {
-        card: '0 10px 28px rgba(139, 0, 0, 0.10)',
-        soft: '0 6px 18px rgba(196, 30, 58, 0.12)',
+        card: '0 10px 24px rgba(21, 32, 52, 0.12)',
+        soft: '0 5px 14px rgba(21, 32, 52, 0.10)',
       },
       borderRadius: {
         panel: '8px',

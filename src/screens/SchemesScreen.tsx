@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { TVKColors, typography, spacing, radius } from '../theme';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
@@ -31,7 +32,7 @@ interface Scheme {
 
 const SCHEMES: Scheme[] = [
   {
-    id: 'S1', name: 'Kalaignar Magalir Urimai Thittam',
+    id: 'S1', name: 'Magalir Urimai Thittam',
     desc: 'Monthly financial assistance for women heads of household',
     amount: '₹1,000/month', dept: 'Social Welfare Dept',
     eligible: true, enrolled: true,
@@ -79,6 +80,7 @@ const SchemesScreen: React.FC = () => {
   const [filter, setFilter]           = useState<'all' | 'enrolled' | 'eligible'>('all');
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { mode, theme } = useTheme();
 
   const filteredSchemes = SCHEMES.filter(s => {
     if (filter === 'enrolled') return enrolledIds.includes(s.id);
@@ -112,23 +114,50 @@ const SchemesScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
       {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + spacing.sm, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={styles.headerTopRow}>
-          <DrawerMenuButton />
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
           <View style={styles.headerTextWrap}>
-            <Text style={styles.headerTitle}>{strings.schemes.title}</Text>
-            <Text style={styles.headerSub}>{strings.schemes.subtitle}</Text>
+            <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+              {strings.schemes.title}
+            </Text>
+            <Text style={[styles.headerSub, { color: theme.headerSubText }]}>
+              {strings.schemes.subtitle}
+            </Text>
           </View>
         </View>
 
         <View style={styles.statsRow}>
           {[
-            { label: strings.schemes.enrolled, value: String(enrolledCount), bg: 'rgba(255,255,255,0.2)', color: TVKColors.white },
-            { label: strings.schemes.newEligible, value: String(eligibleCount), bg: TVKColors.accentLight, color: TVKColors.accentDark },
-            { label: strings.schemes.monthly, value: monthlyBenefit, bg: 'rgba(255,255,255,0.2)', color: TVKColors.white },
+            {
+              label: strings.schemes.enrolled,
+              value: String(enrolledCount),
+              bg: mode === 'dark' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
+              color: mode === 'dark' ? theme.headerText : TVKColors.white,
+            },
+            {
+              label: strings.schemes.newEligible,
+              value: String(eligibleCount),
+              bg: mode === 'dark' ? 'rgba(255,255,255,0.3)' : TVKColors.accentLight,
+              color: mode === 'dark' ? theme.headerText : TVKColors.accentDark,
+            },
+            {
+              label: strings.schemes.monthly,
+              value: monthlyBenefit,
+              bg: mode === 'dark' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
+              color: mode === 'dark' ? theme.headerText : TVKColors.white,
+            },
           ].map(s => (
             <View key={s.label} style={[styles.statChip, { backgroundColor: s.bg }]}>
               <Text style={[styles.statValue, { color: s.color }]}>{s.value}</Text>

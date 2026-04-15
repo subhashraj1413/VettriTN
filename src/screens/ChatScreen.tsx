@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 import { TVKColors, typography, spacing, radius } from '../theme';
 import { aiService } from '../services/aiService';
@@ -40,6 +41,7 @@ const ChatScreen: React.FC = () => {
   const [loading,   setLoading]   = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const insets = useSafeAreaInsets();
+  const { mode, theme } = useTheme();
 
   useEffect(() => {
     setMessages(prev =>
@@ -107,20 +109,38 @@ const ChatScreen: React.FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={insets.top + 56}
     >
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
       {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.md }]}>
-        <DrawerMenuButton />
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + spacing.md, backgroundColor: theme.headerBackground },
+        ]}
+      >
+        <DrawerMenuButton
+          color={theme.headerText}
+          backgroundColor={theme.headerChrome}
+        />
         <View style={styles.headerAvatarWrap}>
-          <View style={styles.headerAvatar}>
+          <View
+            style={[
+              styles.headerAvatar,
+              { backgroundColor: mode === 'dark' ? 'rgba(0,0,0,0.16)' : 'rgba(255,255,255,0.2)' },
+            ]}
+          >
             <Text style={{ fontSize: 18 }}>🤖</Text>
           </View>
-          <View style={styles.onlineDot} />
+          <View
+            style={[
+              styles.onlineDot,
+              { borderColor: theme.headerBackground },
+            ]}
+          />
         </View>
         <View>
-          <Text style={styles.headerTitle}>{strings.chat.title}</Text>
-          <Text style={styles.headerSub}>{strings.chat.subtitle}</Text>
+          <Text style={[styles.headerTitle, { color: theme.headerText }]}>{strings.chat.title}</Text>
+          <Text style={[styles.headerSub, { color: theme.headerSubText }]}>{strings.chat.subtitle}</Text>
         </View>
       </View>
 

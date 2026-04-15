@@ -59,7 +59,7 @@ export const translations = {
         incomeSub: 'Application submitted and under review',
         grievanceTitle: 'Grievance #GR-0892',
         grievanceSub: 'Street light issue assigned to Chennai Corporation',
-        schemeTitle: 'Kalaignar Scheme',
+        schemeTitle: 'CM Scheme',
         schemeSub: 'Monthly benefit credited successfully',
         today: 'Today',
         yesterday: 'Yesterday',
@@ -184,7 +184,7 @@ export const translations = {
   },
   ta: {
     drawer: {
-      title: 'வெற்றி டி.என்',
+      title: 'வெற்றி தநா',
       subtitle: 'குடிமக்கள் சேவைகள்',
       language: 'மொழி',
       english: 'EN',
@@ -206,7 +206,7 @@ export const translations = {
       profile: 'சுயவிவரம்',
     },
     home: {
-      badge: 'வெற்றி டி.என்',
+      badge: 'வெற்றி தநா',
       greeting: 'வணக்கம்',
       subtitle: 'டிஜிட்டல் சேவைகள், புகார்கள், நலத்திட்டங்கள் அனைத்தும் ஒரே இடத்தில்.',
       verifiedCitizenId: 'சரிபார்க்கப்பட்ட குடிமக்கள் அட்டை',
@@ -349,7 +349,7 @@ export const translations = {
     },
     auth: {
       badge: 'பாதுகாப்பான அணுகல்',
-      title: 'வெற்றி டி.என் உள்நுழைவு',
+      title: 'வெற்றி தநா உள்நுழைவு',
       subtitle: 'ஆவணங்கள், புகார்கள் மற்றும் திட்டங்களை அணுக உங்கள் கணக்கில் உள்நுழைக.',
       email: 'மின்னஞ்சல்',
       password: 'கடவுச்சொல்',

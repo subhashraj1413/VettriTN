@@ -11,11 +11,12 @@ import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 import { TVKColors } from '../theme';
 
 const CITIZEN = {
-  name: 'Rajesh Kumar',
+  name: 'Subhash',
   initials: 'RK',
   id: 'TN-2024-087432',
   constituency: 'Perambur',
@@ -26,6 +27,23 @@ const HomeScreen: React.FC = () => {
   const openRoute = (href: Href) => router.push(href);
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
+  const classicPanelStyle = {
+    borderColor: '#D8E0EA',
+    borderWidth: 1,
+    shadowColor: '#1E293B',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    elevation: 3,
+  } as const;
+  const softPanelStyle = {
+    shadowColor: '#1E293B',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 2,
+  } as const;
   const quickActions = [
     {
       label: strings.home.quickActions.documentsLabel,
@@ -65,6 +83,11 @@ const HomeScreen: React.FC = () => {
     { label: strings.home.openIssues, value: '1', href: '/grievances' as Href, tone: 'rose' },
     { label: strings.home.docsReady, value: '6', href: '/documents' as Href, tone: 'ivory' },
   ] as const;
+  const statToneColors = {
+    gold: '#C9A000',
+    rose: '#C41E3A',
+    ivory: '#475569',
+  } as const;
   const recentActivity = [
     {
       title: strings.home.activity.incomeTitle,
@@ -91,13 +114,13 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View className="flex-1 bg-tvk-paper">
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
-      <View className="bg-tvk-red">
+      <View className="rounded-b-[10px]" style={{ backgroundColor: theme.headerBackground }}>
         <View className="flex-row">
-          <View className="h-1 flex-1 bg-tvk-maroon" />
-          <View className="h-1 flex-1 bg-tvk-gold" />
-          <View className="h-1 flex-1 bg-tvk-maroon" />
+          <View className="h-1 flex-1" style={{ backgroundColor: theme.headerText }} />
+          <View className="h-1 flex-1" style={{ backgroundColor: TVKColors.primary }} />
+          <View className="h-1 flex-1" style={{ backgroundColor: theme.headerText }} />
         </View>
 
         <View
@@ -106,16 +129,28 @@ const HomeScreen: React.FC = () => {
         >
           <View className="flex-1 flex-row items-center">
             <View className="mr-3">
-              <DrawerMenuButton />
+              <DrawerMenuButton
+                color={theme.headerText}
+                backgroundColor={theme.headerChrome}
+              />
             </View>
             <View className="flex-1">
-              <Text className="text-[11px] font-semibold uppercase tracking-[2px] text-white/70">
+              <Text
+                className="text-[11px] font-semibold uppercase tracking-[2px]"
+                style={{ color: theme.headerSubText }}
+              >
                 {strings.home.badge}
               </Text>
-              <Text className="mt-1 text-[24px] font-bold leading-[30px] text-white">
+              <Text
+                className="mt-1 text-[24px] font-bold leading-[30px]"
+                style={{ color: theme.headerText }}
+              >
                 {strings.home.greeting}, {CITIZEN.name.split(' ')[0]}
               </Text>
-              <Text className="mt-1 text-[13px] leading-[18px] text-white/75">
+              <Text
+                className="mt-1 text-[13px] leading-[18px]"
+                style={{ color: theme.headerSubText }}
+              >
                 {strings.home.subtitle}
               </Text>
             </View>
@@ -125,22 +160,28 @@ const HomeScreen: React.FC = () => {
             className="ml-4 h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15"
             onPress={() => openRoute('/profile' as Href)}
             activeOpacity={0.85}
+            style={{
+              borderColor: theme.headerChrome,
+              backgroundColor: theme.headerChrome,
+            }}
           >
-            <Text className="text-sm font-bold text-white">{CITIZEN.initials}</Text>
+            <Text className="text-sm font-bold" style={{ color: theme.headerText }}>
+              {CITIZEN.initials}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 28 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 28 }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="-mt-6 overflow-hidden rounded-panel border border-tvk-border bg-white shadow-card">
-          <View className="bg-tvk-mist px-5 py-4">
+        <View className="mt-5 overflow-hidden rounded-panel bg-white" style={classicPanelStyle}>
+          <View className="bg-white px-5 py-4" style={{ borderBottomWidth: 1, borderBottomColor: '#E6EDF5' }}>
             <View className="flex-row items-start justify-between">
               <View className="flex-1 pr-4">
-                <Text className="text-[12px] font-semibold uppercase tracking-[1.5px] text-tvk-red/75">
+                <Text className="text-[11px] font-semibold uppercase tracking-[1.2px] text-tvk-red/70">
                   {strings.home.verifiedCitizenId}
                 </Text>
                 <Text className="mt-2 text-[26px] font-bold leading-[32px] text-tvk-ink">
@@ -154,8 +195,11 @@ const HomeScreen: React.FC = () => {
                 </Text>
               </View>
 
-              <View className="rounded-panel bg-tvk-gold px-3 py-2">
-                <Text className="text-[11px] font-bold uppercase tracking-[1px] text-tvk-amber">
+              <View
+                className="rounded-panel px-3 py-2"
+                style={{ backgroundColor: '#F7E8AA', borderWidth: 1, borderColor: '#E9D488' }}
+              >
+                <Text className="text-[11px] font-bold uppercase tracking-[0.6px] text-tvk-amber">
                   {strings.home.live}
                 </Text>
               </View>
@@ -166,17 +210,22 @@ const HomeScreen: React.FC = () => {
             {heroStats.map(stat => (
               <TouchableOpacity
                 key={stat.label}
-                className={`flex-1 rounded-panel px-3 py-3 ${
-                  stat.tone === 'gold'
-                    ? 'bg-tvk-cream'
-                    : stat.tone === 'rose'
-                      ? 'bg-tvk-blush'
-                      : 'bg-tvk-paper'
-                }`}
+                className="flex-1 rounded-panel bg-white px-3 py-3"
+                style={{
+                  borderWidth: 1,
+                  borderColor: '#DDE4EC',
+                  borderTopWidth: 3,
+                  borderTopColor: statToneColors[stat.tone],
+                }}
                 onPress={() => openRoute(stat.href)}
                 activeOpacity={0.85}
               >
-                <Text className="text-center text-[22px] font-bold text-tvk-ink">{stat.value}</Text>
+                <Text
+                  className="text-center text-[22px] font-bold"
+                  style={{ color: statToneColors[stat.tone] }}
+                >
+                  {stat.value}
+                </Text>
                 <Text className="mt-1 text-center text-[11px] font-medium text-tvk-muted">
                   {stat.label}
                 </Text>
@@ -185,7 +234,8 @@ const HomeScreen: React.FC = () => {
           </View>
 
           <TouchableOpacity
-            className="mx-4 mb-4 flex-row items-center rounded-panel bg-tvk-maroon px-4 py-4"
+            className="mx-4 mb-4 flex-row items-center rounded-panel px-4 py-4"
+            style={{ backgroundColor: '#801226', borderWidth: 1, borderColor: '#680C1F' }}
             onPress={() => openRoute('/citizen-id' as Href)}
             activeOpacity={0.88}
           >
@@ -205,7 +255,7 @@ const HomeScreen: React.FC = () => {
         </View>
 
         <View className="mt-6">
-          <View className="mb-3 flex-row items-center justify-between">
+          <View className="mb-4 flex-row items-center justify-between">
             <Text className="text-[18px] font-bold text-tvk-ink">{strings.home.quickAccess}</Text>
             <Text className="text-[12px] font-medium text-tvk-red">
               {strings.home.digitalServices}
@@ -216,10 +266,15 @@ const HomeScreen: React.FC = () => {
             {quickActions.map(a => (
               <TouchableOpacity
                 key={a.label}
-                className="mb-3 w-[48%] rounded-panel border border-tvk-border bg-white p-4 shadow-soft"
+                className="mb-3 w-[48%] rounded-panel border bg-white px-4 pb-4 pt-3"
+                style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
                 onPress={() => openRoute(a.href)}
                 activeOpacity={0.88}
               >
+                <View
+                  className="mb-3 h-1 w-9 rounded-full"
+                  style={{ backgroundColor: a.iconColor }}
+                />
                 <View
                   className="mb-4 h-11 w-11 items-center justify-center rounded-panel"
                   style={{ backgroundColor: a.tint }}
@@ -234,7 +289,14 @@ const HomeScreen: React.FC = () => {
         </View>
 
         <TouchableOpacity
-          className="mt-2 flex-row items-center rounded-panel bg-tvk-red px-4 py-4 shadow-card"
+          className="mt-3 flex-row items-center rounded-panel px-4 py-4"
+          style={[
+            classicPanelStyle,
+            {
+              backgroundColor: TVKColors.primary,
+              borderColor: '#9A1B31',
+            },
+          ]}
           onPress={() => openRoute('/chat' as Href)}
           activeOpacity={0.9}
         >
@@ -258,7 +320,11 @@ const HomeScreen: React.FC = () => {
         </View>
 
         {recentActivity.map((a, i) => (
-          <View key={i} className="mb-3 flex-row rounded-panel border border-tvk-border bg-white p-4 shadow-soft">
+          <View
+            key={i}
+            className="mb-3 flex-row rounded-panel border bg-white p-4"
+            style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
+          >
             <View
               className="mr-3 h-11 w-11 items-center justify-center rounded-panel"
               style={{ backgroundColor: `${a.color}18` }}
@@ -277,17 +343,20 @@ const HomeScreen: React.FC = () => {
           </View>
         ))}
 
-        <View className="mt-3 rounded-panel border border-tvk-border bg-tvk-cream p-4">
+        <View
+          className="mt-3 rounded-panel border bg-white p-4"
+          style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
+        >
           <View className="flex-row items-center justify-between">
             <View className="flex-1 pr-3">
-              <Text className="text-[16px] font-semibold text-tvk-amber">
+              <Text className="text-[16px] font-semibold text-tvk-red">
                 {strings.home.focusTitle}
               </Text>
               <Text className="mt-1 text-[13px] leading-[18px] text-tvk-muted">
                 {strings.home.focusSub}
               </Text>
             </View>
-            <Feather name="sunrise" size={20} color={TVKColors.accentDark} />
+            <Feather name="sunrise" size={20} color={TVKColors.primary} />
           </View>
         </View>
       </ScrollView>

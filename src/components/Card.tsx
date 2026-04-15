@@ -46,11 +46,16 @@ const Card: React.FC<CardProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: TVKColors.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     padding: spacing.lg,
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: TVKColors.border,
     marginBottom: spacing.md,
+    shadowColor: '#1F2937',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 2,
   },
   noPadding: {
     padding: 0,

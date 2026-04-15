@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { TVKColors, typography, spacing, radius } from '../theme';
 import Card from '../components/Card';
 import { useAppLanguage } from '../i18n/LanguageProvider';
@@ -12,14 +13,25 @@ import { useAppLanguage } from '../i18n/LanguageProvider';
 export const CitizenIDScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
 
   return (
     <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
-      <View style={[idStyles.header, { paddingTop: insets.top + spacing.md }]}>
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
+      <View
+        style={[
+          idStyles.header,
+          { paddingTop: insets.top + spacing.md, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={idStyles.headerTopRow}>
-          <DrawerMenuButton />
-          <Text style={idStyles.headerTitle}>{strings.citizenId.title}</Text>
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
+          <Text style={[idStyles.headerTitle, { color: theme.headerText }]}>
+            {strings.citizenId.title}
+          </Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={{ padding: spacing.lg }}>
@@ -37,7 +49,7 @@ export const CitizenIDScreen: React.FC = () => {
             <Text style={idStyles.photoInitials}>RK</Text>
           </View>
           <View>
-            <Text style={idStyles.citizenName}>Rajesh Kumar</Text>
+            <Text style={idStyles.citizenName}>Subhash</Text>
             <Text style={idStyles.citizenSub}>S/O Murugesan Kumar</Text>
             <Text style={idStyles.citizenSub}>DOB: 15 March 1988</Text>
           </View>
@@ -124,6 +136,7 @@ const idStyles = StyleSheet.create({
 export const ServicesScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
   const categories = [
     { emoji: '📋', label: 'Certificates',  color: TVKColors.primary,   bg: TVKColors.primaryLight },
     { emoji: '🏠', label: 'Housing',        color: TVKColors.info,       bg: TVKColors.infoLight    },
@@ -135,13 +148,25 @@ export const ServicesScreen: React.FC = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
-      <View style={[svcStyles.header, { paddingTop: insets.top + spacing.sm }]}>
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
+      <View
+        style={[
+          svcStyles.header,
+          { paddingTop: insets.top + spacing.sm, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={svcStyles.headerTopRow}>
-          <DrawerMenuButton />
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
           <View style={{ flex: 1 }}>
-            <Text style={svcStyles.headerTitle}>{strings.services.title}</Text>
-            <Text style={svcStyles.headerSub}>{strings.services.subtitle}</Text>
+            <Text style={[svcStyles.headerTitle, { color: theme.headerText }]}>
+              {strings.services.title}
+            </Text>
+            <Text style={[svcStyles.headerSub, { color: theme.headerSubText }]}>
+              {strings.services.subtitle}
+            </Text>
           </View>
         </View>
       </View>
@@ -197,24 +222,35 @@ const svcStyles = StyleSheet.create({
 export const ProfileScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
   const sections = [
-    { title: strings.profile.personalInformation, rows: [['Full Name','Rajesh Kumar'],['Date of Birth','15 March 1988'],['Gender','Male'],['Mobile','+91 98*** ***21'],['Email','rajesh.k@gmail.com']] },
+    { title: strings.profile.personalInformation, rows: [['Full Name','Subhash'],['Date of Birth','15 March 1988'],['Gender','Male'],['Mobile','+91 98*** ***21'],['Email','rajesh.k@gmail.com']] },
     { title: strings.profile.address, rows: [['Street','12A, Gandhi Nagar'],['Area','Perambur, Chennai'],['District','Chennai'],['PIN Code','600011']] },
     { title: strings.profile.civicInformation, rows: [['Constituency','Perambur'],['Voter ID','TN/19/0234/...'],['Ward','Ward 72, Zone 3'],['Ration Card','Linked & Verified']] },
   ];
 
   return (
     <View style={{ flex: 1, backgroundColor: TVKColors.background }}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
-      <View style={[profStyles.header, { paddingTop: insets.top + spacing.xl }]}>
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
+      <View
+        style={[
+          profStyles.header,
+          { paddingTop: insets.top + spacing.xl, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={profStyles.headerTopRow}>
-          <DrawerMenuButton />
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
         </View>
         <View style={profStyles.avatar}>
           <Text style={profStyles.avatarText}>RK</Text>
         </View>
-        <Text style={profStyles.name}>Rajesh Kumar</Text>
-        <Text style={profStyles.sub}>TN-2024-087432 · {strings.profile.verifiedCitizen}</Text>
+        <Text style={[profStyles.name, { color: theme.headerText }]}>Subhash</Text>
+        <Text style={[profStyles.sub, { color: theme.headerSubText }]}>
+          TN-2024-087432 · {strings.profile.verifiedCitizen}
+        </Text>
         <View style={profStyles.flagStrip}>
           {[TVKColors.maroon, TVKColors.yellow, TVKColors.maroon].map((c, i) => (
             <View key={i} style={[profStyles.flagBand, { backgroundColor: c }]} />

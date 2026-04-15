@@ -14,6 +14,11 @@ export type ThemeTokens = {
   accent: string;
   tabBar: string;
   onAccent: string;
+  headerBackground: string;
+  headerText: string;
+  headerSubText: string;
+  headerChrome: string;
+  statusBarStyle: 'light-content' | 'dark-content';
 };
 
 const lightTheme: ThemeTokens = {
@@ -26,6 +31,11 @@ const lightTheme: ThemeTokens = {
   accent: TVKColors.primary,
   tabBar: TVKColors.maroon,
   onAccent: TVKColors.textInverse,
+  headerBackground: TVKColors.primary,
+  headerText: TVKColors.white,
+  headerSubText: 'rgba(255,255,255,0.78)',
+  headerChrome: 'rgba(255,255,255,0.14)',
+  statusBarStyle: 'light-content',
 };
 
 const darkTheme: ThemeTokens = {
@@ -33,11 +43,16 @@ const darkTheme: ThemeTokens = {
   surface: '#1C1C1E',
   card: '#242427',
   border: '#3A3A3E',
-  primaryText: '#F5F5F5',
+  primaryText: '#7F8895',
   secondaryText: '#C5C5C8',
   accent: TVKColors.yellow,
   tabBar: '#1F0D10',
   onAccent: '#1A1A1A',
+  headerBackground: '#D6A40C',
+  headerText: '#1A1A1A',
+  headerSubText: 'rgba(26,26,26,0.72)',
+  headerChrome: 'rgba(0,0,0,0.14)',
+  statusBarStyle: 'dark-content',
 };
 
 type ThemeContextValue = {

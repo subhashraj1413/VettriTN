@@ -7,9 +7,13 @@ import { TVKColors } from '../theme';
 
 type Props = {
   color?: string;
+  backgroundColor?: string;
 };
 
-export default function DrawerMenuButton({ color = TVKColors.white }: Props) {
+export default function DrawerMenuButton({
+  color = TVKColors.white,
+  backgroundColor = 'rgba(255,255,255,0.14)',
+}: Props) {
   const navigation = useNavigation();
 
   return (
@@ -22,7 +26,7 @@ export default function DrawerMenuButton({ color = TVKColors.white }: Props) {
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255,255,255,0.14)',
+        backgroundColor,
       }}
     >
       <Feather name="menu" size={20} color={color} />

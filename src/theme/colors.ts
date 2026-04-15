@@ -4,17 +4,17 @@
 export const TVKColors = {
   // ─── TVK Brand (Party Flag Colors) ───────────────────────────────
   maroon:       '#8B0000',  // Deep maroon — top/bottom of flag
-  red:          '#C41E3A',  // Primary brand red
-  redDark:      '#8B0000',  // Darker shade
-  redLight:     '#FFE8EC',  // Tinted background
+  red:          '#9F0000',  // Primary TVK flag red
+  redDark:      '#740000',  // Darker shade
+  redLight:     '#FBE8E8',  // Tinted background
   yellow:       '#F5C518',  // Golden yellow — center of flag
   yellowDark:   '#C9A000',  // Darker yellow for text
-  yellowLight:  '#FFF8E1',  // Yellow tinted background
+  yellowLight:  '#FFF6D9',  // Yellow tinted background
 
   // ─── App UI Semantic Colors ───────────────────────────────────────
-  primary:      '#C41E3A',  // TVK Red → main CTAs, headers
-  primaryDark:  '#8B0000',  // Pressed states, deep accents
-  primaryLight: '#FFE8EC',  // Card backgrounds, chips
+  primary:      '#9F0000',  // TVK Red → main CTAs, headers
+  primaryDark:  '#740000',  // Pressed states, deep accents
+  primaryLight: '#FBE8E8',  // Card backgrounds, chips
 
   accent:       '#F5C518',  // TVK Yellow → highlights, badges
   accentDark:   '#C9A000',  // Text on yellow bg
@@ -35,23 +35,23 @@ export const TVKColors = {
   // ─── Neutrals ────────────────────────────────────────────────────
   white:        '#FFFFFF',
   black:        '#000000',
-  background:   '#F7F7F7',
+  background:   '#F2F4F8',
   surface:      '#FFFFFF',
-  surfaceAlt:   '#F2F2F2',
-  border:       '#E8E8E8',
-  borderLight:  '#F0F0F0',
-  divider:      '#EEEEEE',
+  surfaceAlt:   '#F7F9FC',
+  border:       '#DDE3EA',
+  borderLight:  '#E9EEF5',
+  divider:      '#E6EBF2',
 
   // ─── Text ────────────────────────────────────────────────────────
-  textPrimary:   '#1A1A1A',
-  textSecondary: '#616161',
-  textTertiary:  '#9E9E9E',
+  textPrimary:   '#7F8895',
+  textSecondary: '#576172',
+  textTertiary:  '#7F8895',
   textInverse:   '#FFFFFF',
   textOnYellow:  '#5D4500',  // Readable text on TVK yellow bg
   textOnRed:     '#FFFFFF',  // Text on TVK red
 
   // ─── Splash / Launch Screen ───────────────────────────────────────
-  splashBg:     '#C41E3A',  // TVK Red background
+  splashBg:     '#9F0000',  // TVK Red background
   splashAccent: '#F5C518',  // TVK Yellow elements
 };
 

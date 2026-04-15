@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { TVKColors, typography, spacing, radius } from '../theme';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
@@ -41,6 +42,7 @@ const DocumentsScreen: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
   const filters = [
     { value: 'All', label: strings.documents.filters.all },
     { value: 'Identity', label: strings.documents.filters.identity },
@@ -59,13 +61,23 @@ const DocumentsScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
       {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + spacing.sm, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={styles.headerTopRow}>
-          <DrawerMenuButton />
-          <Text style={styles.headerTitle}>{strings.documents.title}</Text>
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
+          <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+            {strings.documents.title}
+          </Text>
         </View>
         <View style={styles.headerStats}>
           {[
@@ -74,8 +86,8 @@ const DocumentsScreen: React.FC = () => {
             ['1', strings.documents.pending],
           ].map(([v, l]) => (
             <View key={l} style={styles.headerStat}>
-              <Text style={styles.headerStatValue}>{v}</Text>
-              <Text style={styles.headerStatLabel}>{l}</Text>
+              <Text style={[styles.headerStatValue, { color: theme.headerText }]}>{v}</Text>
+              <Text style={[styles.headerStatLabel, { color: theme.headerSubText }]}>{l}</Text>
             </View>
           ))}
         </View>

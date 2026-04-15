@@ -32,7 +32,7 @@ inspired by the vision of Tamilaga Vettri Kazhagam (TVK) for a modern, transpare
 
 You help citizens of Tamil Nadu with:
 1. Government certificates & documents (Income, Community, Birth, Caste, Nativity etc.)
-2. Welfare scheme enrollment (Kalaignar Magalir Urimai Thittam, Free Bus Travel, LPG Scheme etc.)
+2. Welfare scheme enrollment ( Magalir Urimai Thittam, Free Bus Travel, LPG Scheme etc.)
 3. Grievance submission and tracking
 4. New service requests (housing, utilities, transport, education, health)
 5. General government information
@@ -44,7 +44,7 @@ Key government services in Tamil Nadu:
 - Nativity Certificate: Submit school records + Aadhaar. Processing: 5 working days. Fee: Free.
 
 Key welfare schemes:
-- Kalaignar Magalir Urimai Thittam: ₹1,000/month for women heads of household.
+-  Magalir Urimai Thittam: ₹1,000/month for women heads of household.
 - Chief Minister Free Bus Travel: Free on all TN State Transport buses for women, students, journalists.
 - Free LPG Cylinder: 4 free cylinders per year for eligible BPL families.
 - Vettri TN Housing Scheme: ₹2.5 lakh subsidy for low-income families to build/repair homes.
@@ -88,7 +88,7 @@ const getOfflineResponse = (userMessage: string): string => {
     return 'To apply for an Income Certificate:\n\n1. Go to Documents → Request New\n2. Select "Income Certificate"\n3. Upload Aadhaar + Ration Card\n4. Processing takes 7 working days\n\nShall I start your application?';
   }
   if (msg.includes('scheme') || msg.includes('eligible') || msg.includes('welfare')) {
-    return 'Based on your profile, you are eligible for:\n\n● Kalaignar Magalir Urimai Thittam — ₹1,000/month\n● Chief Minister Free Bus Travel\n● Free LPG Cylinder (4/year)\n\nWant me to enroll you in any of these?';
+    return 'Based on your profile, you are eligible for:\n\n●  Magalir Urimai Thittam — ₹1,000/month\n● Chief Minister Free Bus Travel\n● Free LPG Cylinder (4/year)\n\nWant me to enroll you in any of these?';
   }
   if (msg.includes('grievance') || msg.includes('gr-') || msg.includes('complaint')) {
     return 'Your grievance GR-2024-0892:\n\nIssue: Street light not working\nLocation: Perambur Main Road\nStatus: Under Review — Chennai Corporation\nETA: 2–3 working days\n\nShall I send a reminder to the assigned officer?';

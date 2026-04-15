@@ -42,12 +42,14 @@ const Badge: React.FC<BadgeProps> = ({
 const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: radius.full,
     alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.06)',
   },
   text: {
-    letterSpacing: 0.1,
+    letterSpacing: 0,
   },
 });
 

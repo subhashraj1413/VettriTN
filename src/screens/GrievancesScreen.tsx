@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DrawerMenuButton from '../components/DrawerMenuButton';
+import { useTheme } from '../hooks/useTheme';
 import { TVKColors, typography, spacing, radius } from '../theme';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
@@ -81,6 +82,7 @@ const GrievancesScreen: React.FC = () => {
   const [submittedId,  setSubmittedId]  = useState('');
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
+  const { mode, theme } = useTheme();
 
   const handleSubmit = () => {
     if (!description.trim() || !location.trim()) {
@@ -102,22 +104,50 @@ const GrievancesScreen: React.FC = () => {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
       {/* ─── Header ─────────────────────────────────────────────────── */}
-      <View style={[styles.header, { paddingTop: insets.top + spacing.sm }]}>
+      <View
+        style={[
+          styles.header,
+          { paddingTop: insets.top + spacing.sm, backgroundColor: theme.headerBackground },
+        ]}
+      >
         <View style={styles.headerTopRow}>
-          <DrawerMenuButton />
-          <Text style={styles.headerTitle}>{strings.grievances.title}</Text>
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+          />
+          <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+            {strings.grievances.title}
+          </Text>
         </View>
         <View style={styles.tabs}>
           {(['list', 'new'] as const).map(tab => (
             <TouchableOpacity
               key={tab}
-              style={[styles.tab, activeTab === tab && styles.tabActive]}
+              style={[
+                styles.tab,
+                {
+                  borderColor: mode === 'dark' ? 'rgba(26,26,26,0.35)' : 'rgba(255,255,255,0.4)',
+                },
+                activeTab === tab &&
+                  (mode === 'dark'
+                    ? { backgroundColor: 'rgba(26,26,26,0.9)' }
+                    : styles.tabActive),
+              ]}
               onPress={() => { setActiveTab(tab); setSubmitted(false); }}
             >
-              <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
+              <Text
+                style={[
+                  styles.tabText,
+                  { color: mode === 'dark' ? 'rgba(26,26,26,0.82)' : 'rgba(255,255,255,0.8)' },
+                  activeTab === tab &&
+                    (mode === 'dark'
+                      ? { color: TVKColors.yellow, fontWeight: '600' }
+                      : styles.tabTextActive),
+                ]}
+              >
                 {tab === 'list' ? strings.grievances.myGrievances : strings.grievances.new}
               </Text>
             </TouchableOpacity>

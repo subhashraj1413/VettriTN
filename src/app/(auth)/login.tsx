@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
+  Image,
   StatusBar,
   Text,
   TextInput,
@@ -22,7 +23,7 @@ export default function LoginScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const [email, setEmail] = useState("rajesh@vettri.tn");
+  const [email, setEmail] = useState("subhash@gmail.com");
   const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +39,7 @@ export default function LoginScreen() {
       token: `token-${Date.now()}`,
       user: {
         id: "TN-USER-001",
-        name: "Rajesh Kumar",
+        name: "Subhash",
         email: email.trim(),
       },
     };
@@ -54,28 +55,61 @@ export default function LoginScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
 
       <View
         style={{
-          backgroundColor: TVKColors.primary,
+          backgroundColor: theme.headerBackground,
           paddingTop: insets.top + 20,
           paddingHorizontal: 20,
-          paddingBottom: 26,
+          paddingBottom: 16,
         }}
       >
-        <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 12, fontWeight: "700" }}>
-          {strings.auth.badge}
-        </Text>
-        <Text style={{ color: TVKColors.white, fontSize: 28, fontWeight: "800", marginTop: 10 }}>
-          {strings.auth.title}
-        </Text>
-        <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 13, marginTop: 6 }}>
-          {strings.auth.subtitle}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flex: 1, paddingRight: 12 }}>
+            <Text
+              style={{
+                color: theme.headerSubText,
+                fontSize: 12,
+                fontWeight: "700",
+              }}
+            >
+              {strings.auth.badge}
+            </Text>
+            <Text
+              style={{
+                color: theme.headerText,
+                fontSize: 28,
+                fontWeight: "800",
+                marginTop: 10,
+              }}
+            >
+              {strings.auth.title}
+            </Text>
+            <Text
+              style={{
+                color: theme.headerSubText,
+                fontSize: 13,
+                marginTop: 6,
+              }}
+            >
+              {strings.auth.subtitle}
+            </Text>
+          </View>
+        </View>
       </View>
 
       <View style={{ padding: 20, marginTop: -10 }}>
+        <Image
+          source={require("../../assets/login-form-img-yellow.png")}
+          style={{ width: "100%", height: 280, resizeMode: "contain" }}
+        />
         <View
           style={{
             backgroundColor: theme.card,
@@ -85,7 +119,13 @@ export default function LoginScreen() {
             padding: 16,
           }}
         >
-          <Text style={{ color: theme.secondaryText, fontSize: 12, marginBottom: 6 }}>
+          <Text
+            style={{
+              color: theme.secondaryText,
+              fontSize: 12,
+              marginBottom: 6,
+            }}
+          >
             {strings.auth.email}
           </Text>
           <TextInput
@@ -106,7 +146,13 @@ export default function LoginScreen() {
             value={email}
           />
 
-          <Text style={{ color: theme.secondaryText, fontSize: 12, marginBottom: 6 }}>
+          <Text
+            style={{
+              color: theme.secondaryText,
+              fontSize: 12,
+              marginBottom: 6,
+            }}
+          >
             {strings.auth.password}
           </Text>
           <TextInput
@@ -139,7 +185,13 @@ export default function LoginScreen() {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            <Text style={{ color: TVKColors.white, fontSize: 15, fontWeight: "700" }}>
+            <Text
+              style={{
+                color: TVKColors.white,
+                fontSize: 15,
+                fontWeight: "700",
+              }}
+            >
               {loading ? strings.auth.signingIn : strings.auth.login}
             </Text>
           </TouchableOpacity>
