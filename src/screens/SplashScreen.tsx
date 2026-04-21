@@ -10,6 +10,7 @@ import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   Animated,
   StatusBar,
@@ -83,36 +84,18 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
       <View style={[styles.circle, styles.circleTopRight]} />
       <View style={[styles.circle, styles.circleBottomLeft]} />
 
-      {/* Logo mark */}
+      {/* TN Logo */}
       <Animated.View
         style={[
           styles.logoWrapper,
           { opacity: logoOpacity, transform: [{ scale: logoScale }] },
         ]}
       >
-        {/* Outer ring — TVK Yellow */}
-        <View style={styles.logoOuter}>
-          {/* Inner circle — White */}
-          <View style={styles.logoInner}>
-            <Text style={styles.logoInitials}>VTN</Text>
-          </View>
-        </View>
-
-        {/* Yellow dot accents — represent the Vaagai flower */}
-        {[0, 1, 2, 3, 4, 5].map(i => (
-          <View
-            key={i}
-            style={[
-              styles.petal,
-              {
-                transform: [
-                  { rotate: `${i * 60}deg` },
-                  { translateY: -52 },
-                ],
-              },
-            ]}
-          />
-        ))}
+        <Image
+          source={require('../assets/TamilNadu_Logo.svg')}
+          style={styles.logoImage}
+          resizeMode="contain"
+        />
       </Animated.View>
 
       {/* App name */}
@@ -153,7 +136,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 const styles = StyleSheet.create({
   container: {
     flex:            1,
-    backgroundColor: TVKColors.primary,  // TVK Red
+    backgroundColor: TVKColors.accent,  // TVK Red
     alignItems:      'center',
     justifyContent:  'center',
   },
@@ -164,7 +147,7 @@ const styles = StyleSheet.create({
     width:           300,
     height:          300,
     borderRadius:    150,
-    backgroundColor: TVKColors.primaryDark,
+    backgroundColor: TVKColors.yellowDark,
     opacity:         0.3,
   },
   circleTopRight: {
@@ -178,68 +161,39 @@ const styles = StyleSheet.create({
 
   // Logo
   logoWrapper: {
-    width:           120,
-    height:          120,
+    width:           160,
+    height:          160,
     alignItems:      'center',
     justifyContent:  'center',
   },
-  logoOuter: {
-    width:           110,
-    height:          110,
-    borderRadius:    55,
-    backgroundColor: TVKColors.yellow,
-    alignItems:      'center',
-    justifyContent:  'center',
-    borderWidth:     3,
-    borderColor:     'rgba(255,255,255,0.3)',
-  },
-  logoInner: {
-    width:           80,
-    height:          80,
-    borderRadius:    40,
-    backgroundColor: TVKColors.primary,
-    alignItems:      'center',
-    justifyContent:  'center',
-  },
-  logoInitials: {
-    ...typography.h2,
-    color:       TVKColors.yellow,
-    fontWeight:  '800',
-    letterSpacing: 2,
-  },
-  petal: {
-    position:        'absolute',
-    width:           10,
-    height:          10,
-    borderRadius:    5,
-    backgroundColor: TVKColors.yellow,
-    top:             55,
-    left:            55,
+  logoImage: {
+    width:  160,
+    height: 160,
   },
 
   // Text
   appName: {
     ...typography.h1,
-    color:       TVKColors.white,
+    color:       TVKColors.redDark,
     fontWeight:  '700',
     letterSpacing: 1.5,
   },
   appNameTamil: {
     ...typography.body2,
-    color:       TVKColors.yellow,
+    color:       TVKColors.redDark,
     letterSpacing: 1,
     marginTop:   4,
   },
   titleDivider: {
     width:           40,
     height:          2,
-    backgroundColor: TVKColors.yellow,
+    backgroundColor: TVKColors.redDark,
     borderRadius:    1,
     marginVertical:  8,
   },
   tagline: {
     ...typography.body2,
-    color:       'rgba(255,255,255,0.75)',
+    color:       TVKColors.redDark,
     marginTop:   spacing.sm,
     letterSpacing: 0.8,
   },
@@ -267,7 +221,7 @@ const styles = StyleSheet.create({
   },
   attribution: {
     ...typography.caption,
-    color:       'rgba(255,255,255,0.55)',
+    color:       'rgb(0, 0, 0)',
     marginBottom: spacing.lg,
     textAlign:   'center',
   },

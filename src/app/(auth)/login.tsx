@@ -23,7 +23,7 @@ export default function LoginScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const [email, setEmail] = useState("subhash@gmail.com");
+  const [email, setEmail] = useState("tksubhashraj14@gmail.com");
   const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
 

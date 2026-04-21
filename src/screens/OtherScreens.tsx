@@ -51,12 +51,12 @@ export const CitizenIDScreen: React.FC = () => {
           {/* Citizen row */}
           <View className="flex-row gap-3 items-center mb-4">
             <View className="w-16 h-16 rounded-full bg-white/20 items-center justify-center border-2 border-white/35">
-              <Text className="text-[22px] font-bold text-white">RK</Text>
+              <Text className="text-[22px] font-bold text-white">TS</Text>
             </View>
             <View>
               <Text className="text-[16px] font-semibold text-white">Subhash</Text>
               <Text className="text-[12px] text-white/70 mt-0.5">S/O Thangaraj</Text>
-              <Text className="text-[12px] text-white/70 mt-0.5">DOB: 15 March 1988</Text>
+              <Text className="text-[12px] text-white/70 mt-0.5">DOB: 14 May 1989</Text>
             </View>
           </View>
 
@@ -67,8 +67,8 @@ export const CitizenIDScreen: React.FC = () => {
           <View className="flex-row flex-wrap gap-3">
             {[
               ['Citizen ID',    'TN-2024-087432'],
-              ['Constituency',  'Perambur'],
-              ['District',      'Chennai'],
+              ['Constituency',  'Aranthangi'],
+              ['District',      'Pudukkottai'],
               ['Valid Until',   'Dec 2029'],
             ].map(([key, val]) => (
               <View key={key} className="w-[45%]">
@@ -219,19 +219,19 @@ export const ProfileScreen: React.FC = () => {
       title: strings.profile.personalInformation,
       rows: [
         ['Full Name',      'Subhash'],
-        ['Date of Birth',  '15 March 1988'],
+        ['Date of Birth',  '14 May 1989'],
         ['Gender',         'Male'],
         ['Mobile',         '+91 98*** ***21'],
-        ['Email',          'subhash@gmail.com'],
+        ['Email',          'tksubhashraj14@gmail.com'],
       ],
     },
     {
       title: strings.profile.address,
       rows: [
         ['Street',   '12A, Gandhi Nagar'],
-        ['Area',     'Perambur, Chennai'],
-        ['District', 'Chennai'],
-        ['PIN Code', '600011'],
+        ['Area',     'Mimisal, Aranthangi'],
+        ['District', 'Pudukkottai'],
+        ['PIN Code', '614621'],
       ],
     },
     {

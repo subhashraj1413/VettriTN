@@ -19,7 +19,7 @@ import { TVKColors } from '../theme';
 
 const CITIZEN = {
   name: 'Subhash',
-  initials: 'RK',
+  initials: 'TS',
   id: 'TN-2024-087432',
   constituency: 'Perambur',
   district: 'Chennai',
