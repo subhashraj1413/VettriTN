@@ -392,19 +392,19 @@ const SchemesScreen: React.FC = () => {
     {
       label:      strings.schemes.enrolled,
       value:      String(enrolledCount),
-      bgColor:    mode === 'dark' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
+      bgColor:    mode === 'modern' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
       valueColor: theme.headerText,
     },
     {
       label:      strings.schemes.newEligible,
       value:      String(eligibleCount),
-      bgColor:    mode === 'dark' ? 'rgba(255,255,255,0.3)' : TVKColors.accentLight,
-      valueColor: mode === 'dark' ? theme.headerText : TVKColors.accentDark,
+      bgColor:    mode === 'modern' ? 'rgba(255,255,255,0.3)' : TVKColors.accentLight,
+      valueColor: mode === 'modern' ? theme.headerText : TVKColors.accentDark,
     },
     {
       label:      isTa ? 'மொத்தம்' : 'Total',
       value:      String(SCHEMES.length),
-      bgColor:    mode === 'dark' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
+      bgColor:    mode === 'modern' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.2)',
       valueColor: theme.headerText,
     },
   ];

@@ -14,7 +14,7 @@ interface ActivityItemProps {
 }
 
 const SHADOW = {
-  shadowColor: '#1E293B',
+  shadowColor: '#740000',
   shadowOffset: { width: 0, height: 5 },
   shadowOpacity: 0.08,
   shadowRadius: 10,
@@ -35,7 +35,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
   className = '',
 }) => (
   <View
-    className={`flex-row rounded-panel border border-[#DDE4EC] bg-white p-4 mb-3 ${className}`}
+    className={`flex-row rounded-panel border border-tvk-border bg-white p-4 mb-3 ${className}`}
     style={SHADOW}
   >
     {/* Icon badge */}

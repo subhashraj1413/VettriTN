@@ -109,11 +109,11 @@ export const CitizenIDScreen: React.FC = () => {
           <Text className="text-[14px] font-semibold text-tvk-text-primary mb-4">
             {strings.citizenId.linkedDocuments}
           </Text>
-          {[
+          {([
             ['Aadhaar Card', '**** **** 4821', 'success' as const],
             ['Voter ID',     'TN/19/0234/...',  'success' as const],
             ['PAN Card',     'ABCPK****F',       'info'    as const],
-          ].map(([name, num, variant]) => (
+          ] as const).map(([name, num, variant]) => (
             <View
               key={name}
               className="flex-row justify-between items-center py-2 border-b border-tvk-border"

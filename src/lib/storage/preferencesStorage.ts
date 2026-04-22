@@ -5,7 +5,7 @@ import { Session } from '../../features/auth/types';
 const SESSION_KEY = 'vettri.session';
 const THEME_KEY = 'vettri.theme';
 
-export type AppThemeMode = 'light' | 'dark';
+export type AppThemeMode = 'classic' | 'modern';
 
 export async function readSession() {
   const raw = await AsyncStorage.getItem(SESSION_KEY);
@@ -31,7 +31,7 @@ export function clearSession() {
 
 export async function readThemeMode() {
   const raw = await AsyncStorage.getItem(THEME_KEY);
-  return raw === 'dark' || raw === 'light' ? raw : null;
+  return raw === 'classic' || raw === 'modern' ? raw : null;
 }
 
 export function writeThemeMode(mode: AppThemeMode) {

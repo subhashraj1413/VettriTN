@@ -90,15 +90,17 @@ const ChatScreen: React.FC = () => {
               ? 'rounded-br-md border-transparent'
               : 'rounded-bl-md rounded-tl-2xl rounded-tr-2xl bg-tvk-surface border-tvk-border'
           }`}
-          style={isUser ? { backgroundColor: TVKColors.primary } : undefined}
+          style={isUser ? { backgroundColor: theme.accent } : undefined}
         >
           <Text
-            className={`text-[14px] leading-6 ${isUser ? 'text-white' : 'text-tvk-text-primary'}`}
+            className="text-[14px] leading-6"
+            style={isUser ? { color: theme.onAccent } : { color: theme.primaryText }}
           >
             {item.text}
           </Text>
           <Text
-            className={`text-[10px] font-medium mt-1 self-end ${isUser ? 'text-white/60' : 'text-tvk-text-tertiary'}`}
+            className="text-[10px] font-medium mt-1 self-end"
+            style={isUser ? { color: theme.onAccent, opacity: 0.68 } : { color: theme.secondaryText }}
           >
             {item.time}
           </Text>
@@ -112,7 +114,7 @@ const ChatScreen: React.FC = () => {
     <View className="relative mr-3">
       <View
         className="w-11 h-11 rounded-full items-center justify-center"
-        style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+        style={{ backgroundColor: theme.headerChrome }}
       >
         <Text className="text-lg">🤖</Text>
       </View>
@@ -169,7 +171,7 @@ const ChatScreen: React.FC = () => {
                 <Text className="text-sm">🤖</Text>
               </View>
               <View className="flex-row items-center gap-2 bg-tvk-surface rounded-2xl rounded-bl-md px-4 py-3 border border-tvk-border">
-                <ActivityIndicator color={TVKColors.primary} size="small" />
+                <ActivityIndicator color={theme.accent} size="small" />
                 <Text className="text-[12px] text-tvk-text-secondary">{strings.chat.typing}</Text>
               </View>
             </View>
@@ -191,11 +193,15 @@ const ChatScreen: React.FC = () => {
             contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 8, gap: 8 }}
             renderItem={({ item }) => (
               <TouchableOpacity
-                className="bg-tvk-primary-light rounded-full px-4 py-1.5 border border-tvk-primary/30"
+                className="rounded-full px-4 py-1.5 border"
+                style={{
+                  backgroundColor: `${theme.accent}1F`,
+                  borderColor: `${theme.accent}66`,
+                }}
                 onPress={() => handleSend(item)}
                 activeOpacity={0.75}
               >
-                <Text className="text-[12px] text-tvk-primary-dark">{item}</Text>
+                <Text className="text-[12px]" style={{ color: theme.primaryText }}>{item}</Text>
               </TouchableOpacity>
             )}
           />
@@ -217,14 +223,20 @@ const ChatScreen: React.FC = () => {
           blurOnSubmit={false}
         />
         <TouchableOpacity
-          className={`w-11 h-11 rounded-full items-center justify-center flex-shrink-0 ${
-            !inputText.trim() || loading ? 'bg-tvk-border' : 'bg-tvk-primary'
-          }`}
+          className="w-11 h-11 rounded-full items-center justify-center flex-shrink-0"
+          style={{
+            backgroundColor: !inputText.trim() || loading ? theme.border : theme.accent,
+          }}
           onPress={() => handleSend(inputText)}
           disabled={!inputText.trim() || loading}
           activeOpacity={0.8}
         >
-          <Text className="text-white text-base ml-0.5">➤</Text>
+          <Text
+            className="text-base ml-0.5"
+            style={{ color: !inputText.trim() || loading ? theme.secondaryText : theme.onAccent }}
+          >
+            ➤
+          </Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

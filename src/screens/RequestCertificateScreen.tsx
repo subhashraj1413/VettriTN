@@ -127,12 +127,20 @@ const FormField: React.FC<{
 );
 
 const ff = StyleSheet.create({
-  wrap:  { marginBottom: spacing.md },
-  label: { ...typography.caption, color: TVKColors.textSecondary, fontWeight: '600', marginBottom: 6 },
+  wrap:  { marginBottom: spacing.lg },
+  label: { ...typography.caption, color: TVKColors.textSecondary, fontWeight: '700', marginBottom: 8 },
   input: {
-    borderWidth: 1, borderColor: TVKColors.border, borderRadius: radius.md,
-    paddingHorizontal: spacing.md, paddingVertical: spacing.sm,
+    borderWidth: 1,
+    borderColor: TVKColors.border,
+    borderRadius: 14,
+    paddingHorizontal: spacing.md + 2,
+    paddingVertical: spacing.md - 1,
     ...typography.body2, color: TVKColors.textPrimary, backgroundColor: TVKColors.surface,
+    shadowColor: TVKColors.maroon,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 1,
   },
 });
 
@@ -580,10 +588,19 @@ const Step2ApplicantDetails: React.FC<{
       <FormField label={strings.fatherName} value={val('fatherName')} onChangeText={set('fatherName')} />
       <FormField label={strings.address}    value={val('address')}    onChangeText={set('address')} />
 
-      {/* District picker (simplified as text input) */}
+      {/* District selector */}
       <View style={ff.wrap}>
         <Text style={ff.label}>{strings.district}</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 4 }} contentContainerStyle={{ gap: 6 }}>
+        <View style={step2.dropdownWrap}>
+          <Ionicons name="location-outline" size={14} color={TVKColors.primary} />
+          <Text style={step2.dropdownHint}>Quick select district</Text>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginBottom: 8 }}
+          contentContainerStyle={{ gap: 8, paddingRight: 4 }}
+        >
           {TN_DISTRICTS.slice(0, 8).map(d => (
             <TouchableOpacity
               key={d}
@@ -594,13 +611,16 @@ const Step2ApplicantDetails: React.FC<{
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <TextInput
-          style={ff.input}
-          value={val('district')}
-          onChangeText={set('district')}
-          placeholder={strings.district.replace(' *', '')}
-          placeholderTextColor={TVKColors.textTertiary}
-        />
+        <View style={step2.districtInputWrap}>
+          <TextInput
+            style={[ff.input, { borderWidth: 0, shadowOpacity: 0, elevation: 0 }]}
+            value={val('district')}
+            onChangeText={set('district')}
+            placeholder={strings.district.replace(' *', '')}
+            placeholderTextColor={TVKColors.textTertiary}
+          />
+          <Ionicons name="chevron-down" size={16} color={TVKColors.textSecondary} />
+        </View>
       </View>
 
       <FormField label={strings.taluk}   value={val('taluk')}   onChangeText={set('taluk')} />
@@ -629,10 +649,13 @@ const step2 = StyleSheet.create({
   certName:          { ...typography.h5, color: TVKColors.primaryDark },
   certFee:           { ...typography.caption, color: TVKColors.textSecondary, marginTop: 2 },
   sectionTitle:      { ...typography.h4, color: TVKColors.textPrimary, marginBottom: spacing.md },
-  districtChip:      { paddingHorizontal: 10, paddingVertical: 5, borderRadius: radius.full, backgroundColor: TVKColors.background, borderWidth: 0.5, borderColor: TVKColors.border, marginBottom: 8 },
+  dropdownWrap:      { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
+  dropdownHint:      { ...typography.micro, color: TVKColors.textSecondary, fontWeight: '600' },
+  districtChip:      { paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.full, backgroundColor: TVKColors.surfaceAlt, borderWidth: 1, borderColor: TVKColors.border },
   districtChipActive:{ backgroundColor: TVKColors.primaryLight, borderColor: TVKColors.primary },
   districtText:      { ...typography.micro, color: TVKColors.textSecondary },
   districtTextActive:{ color: TVKColors.primary, fontWeight: '600' },
+  districtInputWrap: { flexDirection: 'row', alignItems: 'center', borderRadius: 14, borderWidth: 1, borderColor: TVKColors.border, backgroundColor: TVKColors.surface, paddingRight: spacing.md, shadowColor: TVKColors.maroon, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 8, elevation: 1 },
 });
 
 // ═══════════════════════════════════════════════════════════════════════════

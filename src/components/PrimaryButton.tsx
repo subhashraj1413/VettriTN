@@ -6,7 +6,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { TVKColors } from '../theme';
+import { useTheme } from '../hooks/useTheme';
 
 type Variant = 'filled' | 'outline' | 'ghost';
 
@@ -14,7 +14,6 @@ interface PrimaryButtonProps {
   label: string;
   onPress: () => void;
   variant?: Variant;
-  /** Dynamic accent color — falls back to TVK primary */
   color?: string;
   disabled?: boolean;
   loading?: boolean;
@@ -24,16 +23,11 @@ interface PrimaryButtonProps {
   fullWidth?: boolean;
 }
 
-/**
- * Reusable primary action button.
- * - NativeWind className drives layout, size, and opacity.
- * - Dynamic `color` prop handled via inline style (can't be known at build time).
- */
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   label,
   onPress,
   variant = 'filled',
-  color = TVKColors.primary,
+  color,
   disabled = false,
   loading = false,
   className = '',
@@ -41,32 +35,38 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   textStyle,
   fullWidth = false,
 }) => {
-  const isFilled  = variant === 'filled';
+  const { theme } = useTheme();
+  const isFilled = variant === 'filled';
   const isOutline = variant === 'outline';
+  const resolvedColor = color ?? theme.accent;
 
   const dynamicBtnStyle: ViewStyle = {
-    ...(isFilled  && { backgroundColor: color }),
-    ...(isOutline && { borderColor: color, borderWidth: 1.5 }),
-    shadowColor: '#111827',
+    ...(isFilled && {
+      backgroundColor: resolvedColor,
+      borderColor: theme.headerBackground,
+      borderWidth: 1,
+    }),
+    ...(isOutline && {
+      borderColor: resolvedColor,
+      borderWidth: 1.5,
+      backgroundColor: theme.surface,
+    }),
+    shadowColor: theme.headerBackground,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
+    shadowOpacity: 0.14,
     shadowRadius: 10,
-    elevation: 1,
+    elevation: 2,
   };
 
-  const textColor = isFilled
-    ? TVKColors.white
-    : isOutline
-      ? color
-      : color; // ghost
+  const textColor = isFilled ? theme.onAccent : resolvedColor;
 
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled || loading}
-      activeOpacity={0.8}
+      activeOpacity={0.85}
       className={`
-        items-center justify-center min-h-[46px] rounded-panel py-3 px-6
+        min-h-[48px] items-center justify-center rounded-[14px] px-6 py-3
         ${fullWidth ? 'w-full' : ''}
         ${disabled || loading ? 'opacity-50' : ''}
         ${className}
@@ -74,12 +74,9 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       style={[dynamicBtnStyle, style]}
     >
       {loading ? (
-        <ActivityIndicator color={isFilled ? TVKColors.white : color} size="small" />
+        <ActivityIndicator color={isFilled ? theme.onAccent : resolvedColor} size="small" />
       ) : (
-        <Text
-          className="text-[15px] font-semibold leading-5"
-          style={[{ color: textColor }, textStyle]}
-        >
+        <Text className="text-[15px] font-semibold leading-5" style={[{ color: textColor }, textStyle]}>
           {label}
         </Text>
       )}

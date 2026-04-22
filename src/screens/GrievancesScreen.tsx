@@ -15,6 +15,7 @@ import FormField from '../components/FormField';
 import EmptyState from '../components/EmptyState';
 import { TVKColors } from '../theme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
+import { useTheme } from '../hooks/useTheme';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -92,6 +93,7 @@ const GrievancesScreen: React.FC = () => {
   const [submitted,   setSubmitted]   = useState(false);
   const [submittedId, setSubmittedId] = useState('');
   const { strings } = useAppLanguage();
+  const { theme } = useTheme();
 
   const handleSubmit = () => {
     if (!description.trim() || !location.trim()) {
@@ -117,15 +119,18 @@ const GrievancesScreen: React.FC = () => {
         <TouchableOpacity
           key={tab}
           onPress={() => { setActiveTab(tab); setSubmitted(false); }}
-          className={`
-            px-5 py-1.5 rounded-full border
-            ${activeTab === tab
-              ? 'bg-white border-white/60'
-              : 'border-white/40 bg-transparent'}
-          `}
+          className="px-5 py-1.5 rounded-full border"
+          style={{
+            backgroundColor: activeTab === tab ? theme.headerChrome : 'transparent',
+            borderColor: theme.headerSubText,
+          }}
         >
           <Text
-            className={`text-[13px] ${activeTab === tab ? 'font-semibold text-tvk-primary' : 'text-white/80'}`}
+            className="text-[13px]"
+            style={{
+              fontWeight: activeTab === tab ? '600' : '500',
+              color: activeTab === tab ? theme.headerText : theme.headerSubText,
+            }}
           >
             {tab === 'list' ? strings.grievances.myGrievances : strings.grievances.new}
           </Text>
@@ -262,6 +267,8 @@ const GrievancesScreen: React.FC = () => {
                 placeholder={strings.grievances.descriptionPlaceholder}
                 multiline
                 numberOfLines={4}
+                required
+                helperText="Include landmark, issue duration, and current impact."
               />
 
               {/* Location */}
@@ -270,6 +277,8 @@ const GrievancesScreen: React.FC = () => {
                 value={location}
                 onChangeText={setLocation}
                 placeholder={strings.grievances.locationPlaceholder}
+                required
+                helperText="Street name or nearest public building."
               />
 
               {/* Priority */}

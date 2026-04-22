@@ -1,9 +1,6 @@
 /**
  * Vettri TN — Splash Screen
- * TVK official colors: Maroon-Red (#C41E3A) + Golden Yellow (#F5C518)
- *
- * Shows animated logo on TVK red background.
- * Navigates to Main after 2.5s.
+ * Modern launch look using TVK Yellow + Red.
  */
 
 import React, { useEffect, useRef } from 'react';
@@ -19,7 +16,7 @@ import {
 } from 'react-native';
 import { TVKColors, typography, spacing } from '../theme';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -33,9 +30,9 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const barWidth     = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    StatusBar.setBarStyle('light-content');
+    StatusBar.setBarStyle('dark-content');
     if (Platform.OS === 'android') {
-      StatusBar.setBackgroundColor(TVKColors.primary);
+      StatusBar.setBackgroundColor(TVKColors.yellowLight);
     }
 
     Animated.sequence([
@@ -78,7 +75,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={TVKColors.primary} />
+      <StatusBar barStyle="dark-content" backgroundColor={TVKColors.yellowLight} />
 
       {/* Background accent circles */}
       <View style={[styles.circle, styles.circleTopRight]} />
@@ -91,8 +88,9 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           { opacity: logoOpacity, transform: [{ scale: logoScale }] },
         ]}
       >
+        <View style={styles.logoHalo} />
         <Image
-          source={require('../assets/TamilNadu_Logo.svg')}
+          source={require('../assets/TN-logo.png')}
           style={styles.logoImage}
           resizeMode="contain"
         />
@@ -136,7 +134,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 const styles = StyleSheet.create({
   container: {
     flex:            1,
-    backgroundColor: TVKColors.accent,  // TVK Red
+    backgroundColor: TVKColors.yellowLight,
     alignItems:      'center',
     justifyContent:  'center',
   },
@@ -144,56 +142,72 @@ const styles = StyleSheet.create({
   // Background decorative circles
   circle: {
     position:        'absolute',
-    width:           300,
-    height:          300,
-    borderRadius:    150,
-    backgroundColor: TVKColors.yellowDark,
-    opacity:         0.3,
+    width:           280,
+    height:          280,
+    borderRadius:    140,
+    backgroundColor: TVKColors.primary,
+    opacity:         0.12,
   },
   circleTopRight: {
-    top:  -80,
-    right: -80,
+    top:  -70,
+    right: -70,
   },
   circleBottomLeft: {
-    bottom: -100,
-    left:   -80,
+    bottom: -90,
+    left:   -75,
   },
 
   // Logo
   logoWrapper: {
     width:           160,
     height:          160,
+    borderRadius:    80,
     alignItems:      'center',
     justifyContent:  'center',
+    backgroundColor: TVKColors.white,
+    borderWidth:     1,
+    borderColor:     `${TVKColors.primary}33`,
+    shadowColor:     TVKColors.redDark,
+    shadowOffset:    { width: 0, height: 10 },
+    shadowOpacity:   0.14,
+    shadowRadius:    18,
+    elevation:       4,
+  },
+  logoHalo: {
+    position:        'absolute',
+    width:           126,
+    height:          126,
+    borderRadius:    63,
+    backgroundColor: `${TVKColors.yellow}52`,
   },
   logoImage: {
-    width:  160,
-    height: 160,
+    width:  120,
+    height: 120,
   },
 
   // Text
   appName: {
     ...typography.h1,
-    color:       TVKColors.redDark,
+    color:       TVKColors.primary,
     fontWeight:  '700',
     letterSpacing: 1.5,
   },
   appNameTamil: {
     ...typography.body2,
-    color:       TVKColors.redDark,
+    color:       TVKColors.textOnYellow,
     letterSpacing: 1,
     marginTop:   4,
   },
   titleDivider: {
     width:           40,
     height:          2,
-    backgroundColor: TVKColors.redDark,
+    backgroundColor: TVKColors.primary,
     borderRadius:    1,
     marginVertical:  8,
   },
   tagline: {
     ...typography.body2,
-    color:       TVKColors.redDark,
+    color:       TVKColors.textOnYellow,
     marginTop:   spacing.sm,
     letterSpacing: 0.8,
   },
@@ -209,26 +223,26 @@ const styles = StyleSheet.create({
   barTrack: {
     width:           width * 0.5,
     height:          3,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(93,69,0,0.16)',
     borderRadius:    2,
     overflow:        'hidden',
     marginBottom:    spacing.lg,
   },
   barFill: {
     height:          3,
-    backgroundColor: TVKColors.yellow,
+    backgroundColor: TVKColors.primary,
     borderRadius:    2,
   },
   attribution: {
     ...typography.caption,
-    color:       'rgb(0, 0, 0)',
+    color:       'rgba(93,69,0,0.88)',
     marginBottom: spacing.lg,
     textAlign:   'center',
   },
   flagStrip: {
     flexDirection: 'row',
-    width:         80,
-    height:        8,
+    width:         88,
+    height:        9,
     borderRadius:  4,
     overflow:      'hidden',
   },

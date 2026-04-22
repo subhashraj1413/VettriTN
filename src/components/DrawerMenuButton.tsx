@@ -1,8 +1,8 @@
-import { Feather } from '@expo/vector-icons';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { TVKColors } from '../theme';
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import React from "react";
+import { TouchableOpacity } from "react-native";
+import { useTheme } from "../hooks/useTheme";
 
 interface DrawerMenuButtonProps {
   color?: string;
@@ -14,19 +14,22 @@ interface DrawerMenuButtonProps {
  * Layout via NativeWind; dynamic color/bg via inline style only.
  */
 export default function DrawerMenuButton({
-  color = TVKColors.white,
-  backgroundColor = 'rgba(255,255,255,0.14)',
+  color,
+  backgroundColor,
 }: DrawerMenuButtonProps) {
   const navigation = useNavigation();
+  const { theme } = useTheme();
+  const resolvedColor = color ?? theme.headerText;
+  const resolvedBackground = backgroundColor ?? theme.headerChrome;
 
   return (
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-      className="w-10 h-10 rounded-full items-center justify-center"
-      style={{ backgroundColor }}
+      className="w-14 h-14 rounded-full items-center justify-center"
+      style={{ backgroundColor: "white" }}
     >
-      <Feather name="menu" size={20} color={color} />
+      <AntDesign name="align-left" size={24} color="black" />
     </TouchableOpacity>
   );
 }

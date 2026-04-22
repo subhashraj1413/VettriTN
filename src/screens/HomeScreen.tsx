@@ -7,12 +7,10 @@ import {
   View,
 } from 'react-native';
 import { Href, router } from 'expo-router';
-import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import DrawerMenuButton from '../components/DrawerMenuButton';
-import SectionTitle from '../components/SectionTitle';
-import ActivityItem from '../components/ActivityItem';
 import { useTheme } from '../hooks/useTheme';
 import { useAppLanguage } from '../i18n/LanguageProvider';
 import { TVKColors } from '../theme';
@@ -21,329 +19,366 @@ const CITIZEN = {
   name: 'Subhash',
   initials: 'TS',
   id: 'TN-2024-087432',
-  constituency: 'Perambur',
-  district: 'Chennai',
+  ward: 'Perambur, Chennai',
 };
 
 const HomeScreen: React.FC = () => {
   const openRoute = (href: Href) => router.push(href);
   const insets = useSafeAreaInsets();
   const { strings } = useAppLanguage();
-  const { theme } = useTheme();
-  const classicPanelStyle = {
-    borderColor: '#D8E0EA',
-    borderWidth: 1,
-    shadowColor: '#1E293B',
+  const { theme, mode } = useTheme();
+
+  const ctaBg = mode === 'modern' ? theme.accent : TVKColors.primary;
+  const ctaText = mode === 'modern' ? theme.onAccent : TVKColors.white;
+  const ctaSubText = mode === 'modern' ? 'rgba(93,69,0,0.72)' : 'rgba(255,255,255,0.8)';
+  const ctaChrome = mode === 'modern' ? 'rgba(93,69,0,0.12)' : 'rgba(255,255,255,0.14)';
+
+  const elevatedCard = {
+    shadowColor: TVKColors.redDark,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.1,
-    shadowRadius: 14,
-    elevation: 3,
+    shadowRadius: 16,
+    elevation: 4,
   } as const;
-  const softPanelStyle = {
-    shadowColor: '#1E293B',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 2,
-  } as const;
-  const quickActions = [
+
+  const services = [
     {
-      label: strings.home.quickActions.documentsLabel,
-      sub: strings.home.quickActions.documentsSub,
-      href: '/documents' as Href,
-      icon: 'document-text-outline',
-      tint: '#FFE8EC',
-      iconColor: TVKColors.primary,
-    },
-    {
-      label: strings.home.quickActions.servicesLabel,
-      sub: strings.home.quickActions.servicesSub,
+      title: 'Bill Payments',
+      subtitle: 'Electricity, water, tax and transport dues',
       href: '/services' as Href,
-      icon: 'grid-outline',
-      tint: '#FFF8E1',
+      icon: 'wallet-outline' as const,
+      iconColor: TVKColors.primary,
+      tint: TVKColors.primaryLight,
+    },
+    {
+      title: 'ID Management',
+      subtitle: 'Citizen ID, linked records and verification',
+      href: '/citizen-id' as Href,
+      icon: 'card-outline' as const,
       iconColor: TVKColors.accentDark,
+      tint: TVKColors.accentLight,
     },
     {
-      label: strings.home.quickActions.complaintsLabel,
-      sub: strings.home.quickActions.complaintsSub,
+      title: 'Public Complaints',
+      subtitle: 'Raise civic issues and track resolution',
       href: '/grievances' as Href,
-      icon: 'alert-circle-outline',
-      tint: '#FFEBEE',
-      iconColor: TVKColors.error,
+      icon: 'alert-circle-outline' as const,
+      iconColor: TVKColors.maroon,
+      tint: TVKColors.redLight,
     },
     {
-      label: strings.home.quickActions.schemesLabel,
-      sub: strings.home.quickActions.schemesSub,
+      title: 'Announcements',
+      subtitle: 'Government notices and service updates',
       href: '/schemes' as Href,
-      icon: 'ribbon-outline',
-      tint: '#EDE7F6',
-      iconColor: TVKColors.purple,
+      icon: 'megaphone-outline' as const,
+      iconColor: TVKColors.redDark,
+      tint: TVKColors.yellowLight,
     },
   ] as const;
-  const heroStats = [
-    { label: strings.home.activeSchemes, value: '3', href: '/schemes' as Href, tone: 'gold' },
-    { label: strings.home.openIssues, value: '1', href: '/grievances' as Href, tone: 'rose' },
-    { label: strings.home.docsReady, value: '6', href: '/documents' as Href, tone: 'ivory' },
+
+  const metrics = [
+    { label: 'Bills Due', value: '2', tone: TVKColors.primary, href: '/services' as Href },
+    { label: 'IDs Linked', value: '4', tone: TVKColors.maroon, href: '/citizen-id' as Href },
+    { label: 'Open Cases', value: '1', tone: TVKColors.accentDark, href: '/grievances' as Href },
   ] as const;
-  const statToneColors = {
-    gold: '#C9A000',
-    rose: '#C41E3A',
-    ivory: '#475569',
+
+  const announcements = [
+    {
+      title: 'Property Tax Window Open',
+      subtitle: 'Pay before 30 Apr to avoid late fee penalties.',
+      tag: 'Finance',
+    },
+    {
+      title: 'Digital ID Verification Drive',
+      subtitle: 'Ward help centers available from 9:30 AM to 5:30 PM.',
+      tag: 'Identity',
+    },
+    {
+      title: 'Road Repair Complaint Camp',
+      subtitle: 'Priority ticketing for unresolved road safety issues.',
+      tag: 'Civic Works',
+    },
+  ] as const;
+
+  const sectionTitleStyle = {
+    color: TVKColors.textPrimary,
+    fontSize: 19,
+    fontWeight: '700',
+    lineHeight: 26,
   } as const;
-  const recentActivity = [
-    {
-      title: strings.home.activity.incomeTitle,
-      sub: strings.home.activity.incomeSub,
-      time: strings.home.activity.today,
-      icon: 'document-lock-outline',
-      color: TVKColors.warning,
-    },
-    {
-      title: strings.home.activity.grievanceTitle,
-      sub: strings.home.activity.grievanceSub,
-      time: strings.home.activity.yesterday,
-      icon: 'flash-outline',
-      color: TVKColors.info,
-    },
-    {
-      title: strings.home.activity.schemeTitle,
-      sub: strings.home.activity.schemeSub,
-      time: strings.home.activity.daysAgo,
-      icon: 'wallet-outline',
-      color: TVKColors.success,
-    },
-  ] as const;
 
   return (
-    <View className="flex-1 bg-tvk-paper">
+    <View className="flex-1" style={{ backgroundColor: TVKColors.background }}>
       <StatusBar barStyle={theme.statusBarStyle} backgroundColor={theme.headerBackground} />
-
-      <View className="rounded-b-[10px]" style={{ backgroundColor: theme.headerBackground }}>
-        <View className="flex-row">
-          <View className="h-1 flex-1" style={{ backgroundColor: theme.headerText }} />
-          <View className="h-1 flex-1" style={{ backgroundColor: TVKColors.primary }} />
-          <View className="h-1 flex-1" style={{ backgroundColor: theme.headerText }} />
-        </View>
-
-        <View
-          className="flex-row items-center justify-between px-5 pb-5"
-          style={{ paddingTop: insets.top + 16 }}
-        >
-          <View className="flex-1 flex-row items-center">
-            <View className="mr-3">
-              <DrawerMenuButton
-                color={theme.headerText}
-                backgroundColor={theme.headerChrome}
-              />
-            </View>
-            <View className="flex-1">
-              <Text
-                className="text-[11px] font-semibold uppercase tracking-[2px]"
-                style={{ color: theme.headerSubText }}
-              >
-                {strings.home.badge}
-              </Text>
-              <Text
-                className="mt-1 text-[24px] font-bold leading-[30px]"
-                style={{ color: theme.headerText }}
-              >
-                {strings.home.greeting}, {CITIZEN.name.split(' ')[0]}
-              </Text>
-              <Text
-                className="mt-1 text-[13px] leading-[18px]"
-                style={{ color: theme.headerSubText }}
-              >
-                {strings.home.subtitle}
-              </Text>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            className="ml-4 h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/15"
-            onPress={() => openRoute('/profile' as Href)}
-            activeOpacity={0.85}
-            style={{
-              borderColor: theme.headerChrome,
-              backgroundColor: theme.headerChrome,
-            }}
-          >
-            <Text className="text-sm font-bold" style={{ color: theme.headerText }}>
-              {CITIZEN.initials}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
 
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 28 }}
+        contentContainerStyle={{ paddingBottom: 30 }}
         showsVerticalScrollIndicator={false}
       >
-        <View className="mt-5 overflow-hidden rounded-panel bg-white" style={classicPanelStyle}>
-          <View className="bg-white px-5 py-4" style={{ borderBottomWidth: 1, borderBottomColor: '#E6EDF5' }}>
-            <View className="flex-row items-start justify-between">
-              <View className="flex-1 pr-4">
-                <Text className="text-[11px] font-semibold uppercase tracking-[1.2px] text-tvk-red/70">
-                  {strings.home.verifiedCitizenId}
-                </Text>
-                <Text className="mt-2 text-[26px] font-bold leading-[32px] text-tvk-ink">
-                  {CITIZEN.name}
-                </Text>
-                <Text className="mt-1 text-[14px] font-medium text-tvk-muted">
-                  {CITIZEN.id}
-                </Text>
-                <Text className="mt-3 text-[14px] leading-[20px] text-tvk-muted">
-                  {CITIZEN.district} district, {CITIZEN.constituency} constituency
-                </Text>
-              </View>
+        <View
+          className="overflow-hidden rounded-b-[34px] px-5 pb-8"
+          style={{ backgroundColor: theme.headerBackground, paddingTop: insets.top + 12 }}
+        >
+          <View
+            className="absolute -left-12 -top-10 h-40 w-40 rounded-full"
+            style={{ backgroundColor: TVKColors.maroon, opacity: 0.4 }}
+          />
+          <View
+            className="absolute -right-16 top-8 h-52 w-52 rounded-full"
+            style={{ backgroundColor: TVKColors.yellow, opacity: 0.2 }}
+          />
 
-              <View
-                className="rounded-panel px-3 py-2"
-                style={{ backgroundColor: '#F7E8AA', borderWidth: 1, borderColor: '#E9D488' }}
-              >
-                <Text className="text-[11px] font-bold uppercase tracking-[0.6px] text-tvk-amber">
-                  {strings.home.live}
+          <View className="flex-row items-center justify-between">
+            <DrawerMenuButton color={theme.headerText} backgroundColor={theme.headerChrome} />
+            <TouchableOpacity
+              className="h-11 w-11 items-center justify-center rounded-full"
+              onPress={() => openRoute('/profile' as Href)}
+              activeOpacity={0.85}
+              style={{ backgroundColor: theme.headerChrome }}
+            >
+              <Text className="text-[13px] font-bold" style={{ color: theme.headerText }}>
+                {CITIZEN.initials}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View className="mt-5">
+            <Text
+              className="text-[11px] font-semibold uppercase tracking-[2px]"
+              style={{ color: theme.headerSubText }}
+            >
+              {strings.home.badge}
+            </Text>
+            <Text
+              className="mt-2 text-[30px] font-semibold leading-[36px]"
+              style={{ color: theme.headerText }}
+            >
+              {strings.home.greeting}, {CITIZEN.name.split(' ')[0]}
+            </Text>
+            <Text
+              className="mt-2 text-[14px] leading-[20px]"
+              style={{ color: theme.headerSubText }}
+            >
+              One trusted place for payments, IDs, civic complaints, and official updates.
+            </Text>
+          </View>
+
+          <View className="mt-5 flex-row">
+            <View
+              className="mr-3 rounded-full border px-3 py-1"
+              style={{
+                borderColor: theme.headerSubText,
+                backgroundColor: theme.headerChrome,
+              }}
+            >
+              <Text className="text-[11px] font-semibold" style={{ color: theme.headerText }}>
+                Verified Account
+              </Text>
+            </View>
+            <View
+              className="rounded-full border px-3 py-1"
+              style={{
+                borderColor: theme.headerSubText,
+                backgroundColor: theme.headerChrome,
+              }}
+            >
+              <Text className="text-[11px] font-semibold" style={{ color: theme.headerText }}>
+                Accessibility Enabled
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View className="-mt-5 px-4">
+          <View
+            className="overflow-hidden rounded-[22px] border bg-white px-4 pb-4 pt-4"
+            style={[elevatedCard, { borderColor: TVKColors.border }]}
+          >
+            <View
+              className="absolute -right-10 -top-9 h-36 w-36 rounded-full"
+              style={{ backgroundColor: TVKColors.primaryLight }}
+            />
+            <View
+              className="absolute -left-10 bottom-0 h-28 w-28 rounded-full"
+              style={{ backgroundColor: TVKColors.accentLight }}
+            />
+
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 pr-4">
+                <Text className="text-[12px] font-semibold uppercase tracking-[1px]" style={{ color: TVKColors.primaryDark }}>
+                  Next Due
+                </Text>
+                <Text className="mt-1 text-[24px] font-bold" style={{ color: TVKColors.textPrimary }}>
+                  INR 150.40
+                </Text>
+                <Text className="mt-1 text-[13px] leading-[18px]" style={{ color: TVKColors.textSecondary }}>
+                  Electricity bill due on 28 Apr for Ward {CITIZEN.ward}.
                 </Text>
               </View>
+              <TouchableOpacity
+                className="rounded-[14px] px-3 py-3"
+                onPress={() => openRoute('/services' as Href)}
+                activeOpacity={0.9}
+                style={{ backgroundColor: ctaBg }}
+              >
+                <Ionicons name="arrow-forward" size={20} color={ctaText} />
+                <Text className="mt-1 text-[12px] font-semibold" style={{ color: ctaText }}>
+                  Pay Now
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          <View className="flex-row gap-3 px-4 py-4">
-            {heroStats.map(stat => (
-              <TouchableOpacity
-                key={stat.label}
-                className="flex-1 rounded-panel bg-white px-3 py-3"
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#DDE4EC',
-                  borderTopWidth: 3,
-                  borderTopColor: statToneColors[stat.tone],
-                }}
-                onPress={() => openRoute(stat.href)}
-                activeOpacity={0.85}
-              >
-                <Text
-                  className="text-center text-[22px] font-bold"
-                  style={{ color: statToneColors[stat.tone] }}
+          <View className="mt-5">
+            <Text style={sectionTitleStyle}>Services</Text>
+            <Text className="mt-1 text-[13px]" style={{ color: TVKColors.textSecondary }}>
+              Everyday governance tasks with clear navigation.
+            </Text>
+
+            <View className="mt-3 flex-row flex-wrap justify-between">
+              {services.map(service => (
+                <TouchableOpacity
+                  key={service.title}
+                  className="mb-3 w-[48%] rounded-[18px] border bg-white px-4 py-4"
+                  style={[elevatedCard, { borderColor: TVKColors.border }]}
+                  onPress={() => openRoute(service.href)}
+                  activeOpacity={0.9}
                 >
-                  {stat.value}
+                  <View
+                    className="h-11 w-11 items-center justify-center rounded-[13px]"
+                    style={{ backgroundColor: service.tint }}
+                  >
+                    <Ionicons name={service.icon} size={22} color={service.iconColor} />
+                  </View>
+                  <Text className="mt-3 text-[15px] font-semibold" style={{ color: TVKColors.textPrimary }}>
+                    {service.title}
+                  </Text>
+                  <Text className="mt-1 text-[12px] leading-[17px]" style={{ color: TVKColors.textSecondary }}>
+                    {service.subtitle}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          <View
+            className="mt-2 rounded-[20px] border px-4 py-4"
+            style={{ borderColor: `${TVKColors.accentDark}40`, backgroundColor: TVKColors.yellowLight }}
+          >
+            <View className="flex-row items-center justify-between">
+              <Text style={sectionTitleStyle}>Account Snapshot</Text>
+              <TouchableOpacity onPress={() => openRoute('/documents' as Href)} activeOpacity={0.8}>
+                <Text className="text-[12px] font-semibold" style={{ color: TVKColors.primary }}>
+                  View Records
                 </Text>
-                <Text className="mt-1 text-center text-[11px] font-medium text-tvk-muted">
-                  {stat.label}
-                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View className="mt-3 flex-row gap-2">
+              {metrics.map(metric => (
+                <TouchableOpacity
+                  key={metric.label}
+                  className="flex-1 rounded-[14px] border px-2 py-3"
+                  style={{ borderColor: TVKColors.border, backgroundColor: TVKColors.white }}
+                  onPress={() => openRoute(metric.href)}
+                  activeOpacity={0.88}
+                >
+                  <Text className="text-center text-[21px] font-bold" style={{ color: metric.tone }}>
+                    {metric.value}
+                  </Text>
+                  <Text className="mt-1 text-center text-[11px] font-medium" style={{ color: TVKColors.textSecondary }}>
+                    {metric.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          <View
+            className="mt-4 rounded-[20px] border px-4 py-4"
+            style={{ borderColor: TVKColors.border, backgroundColor: TVKColors.white }}
+          >
+            <View className="flex-row items-center justify-between">
+              <Text style={sectionTitleStyle}>Public Announcements</Text>
+              <TouchableOpacity onPress={() => openRoute('/schemes' as Href)} activeOpacity={0.85}>
+                <Ionicons name="chevron-forward" size={18} color={TVKColors.primary} />
+              </TouchableOpacity>
+            </View>
+
+            {announcements.map(item => (
+              <TouchableOpacity
+                key={item.title}
+                className="mt-3 flex-row rounded-[14px] border px-3 py-3"
+                style={{ borderColor: TVKColors.borderLight, backgroundColor: TVKColors.surfaceAlt }}
+                onPress={() => openRoute('/schemes' as Href)}
+                activeOpacity={0.9}
+              >
+                <View
+                  className="mr-3 mt-1 h-8 w-8 items-center justify-center rounded-full"
+                  style={{ backgroundColor: TVKColors.primaryLight }}
+                >
+                  <Ionicons name="notifications-outline" size={16} color={TVKColors.primary} />
+                </View>
+                <View className="flex-1">
+                  <View className="flex-row items-center justify-between">
+                    <Text className="flex-1 pr-2 text-[14px] font-semibold" style={{ color: TVKColors.textPrimary }}>
+                      {item.title}
+                    </Text>
+                    <View className="rounded-full px-2 py-1" style={{ backgroundColor: TVKColors.accentLight }}>
+                      <Text className="text-[10px] font-semibold" style={{ color: TVKColors.accentDark }}>
+                        {item.tag}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text className="mt-1 text-[12px] leading-[17px]" style={{ color: TVKColors.textSecondary }}>
+                    {item.subtitle}
+                  </Text>
+                </View>
               </TouchableOpacity>
             ))}
           </View>
 
           <TouchableOpacity
-            className="mx-4 mb-4 flex-row items-center rounded-panel px-4 py-4"
-            style={{ backgroundColor: '#801226', borderWidth: 1, borderColor: '#680C1F' }}
-            onPress={() => openRoute('/citizen-id' as Href)}
-            activeOpacity={0.88}
+            className="mt-4 flex-row items-center rounded-[18px] px-4 py-4"
+            onPress={() => openRoute('/chat' as Href)}
+            activeOpacity={0.9}
+            style={{ backgroundColor: ctaBg }}
           >
-            <View className="mr-3 h-11 w-11 items-center justify-center rounded-panel bg-white/12">
-              <Ionicons name="card-outline" size={20} color={TVKColors.yellow} />
+            <View
+              className="mr-3 h-11 w-11 items-center justify-center rounded-[12px]"
+              style={{ backgroundColor: ctaChrome }}
+            >
+              <MaterialCommunityIcons name="shield-check-outline" size={22} color={ctaText} />
             </View>
             <View className="flex-1">
-              <Text className="text-[15px] font-semibold text-white">
-                {strings.home.openCitizenId}
+              <Text className="text-[15px] font-semibold" style={{ color: ctaText }}>
+                Need Assistance?
               </Text>
-              <Text className="mt-1 text-[12px] leading-[16px] text-white/70">
-                {strings.home.citizenIdSub}
+              <Text className="mt-1 text-[12px] leading-[17px]" style={{ color: ctaSubText }}>
+                Ask Vettri AI for guided steps in English or Tamil.
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={18} color={TVKColors.yellow} />
+            <Ionicons name="sparkles-outline" size={18} color={ctaText} />
           </TouchableOpacity>
         </View>
 
-        <View className="mt-6">
-          <SectionTitle
-            title={strings.home.quickAccess}
-            action={strings.home.digitalServices}
-          />
-
-          <View className="flex-row flex-wrap justify-between">
-            {quickActions.map(a => (
-              <TouchableOpacity
-                key={a.label}
-                className="mb-3 w-[48%] rounded-panel border bg-white px-4 pb-4 pt-3"
-                style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
-                onPress={() => openRoute(a.href)}
-                activeOpacity={0.88}
-              >
-                <View
-                  className="mb-3 h-1 w-9 rounded-full"
-                  style={{ backgroundColor: a.iconColor }}
-                />
-                <View
-                  className="mb-4 h-11 w-11 items-center justify-center rounded-panel"
-                  style={{ backgroundColor: a.tint }}
-                >
-                  <Ionicons name={a.icon} size={20} color={a.iconColor} />
-                </View>
-                <Text className="text-[15px] font-semibold text-tvk-ink">{a.label}</Text>
-                <Text className="mt-1 text-[12px] leading-[16px] text-tvk-muted">{a.sub}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-
-        <TouchableOpacity
-          className="mt-3 flex-row items-center rounded-panel px-4 py-4"
-          style={[
-            classicPanelStyle,
-            {
-              backgroundColor: TVKColors.primary,
-              borderColor: '#9A1B31',
-            },
-          ]}
-          onPress={() => openRoute('/chat' as Href)}
-          activeOpacity={0.9}
-        >
-          <View className="mr-3 h-12 w-12 items-center justify-center rounded-panel bg-white/14">
-            <MaterialCommunityIcons name="robot-excited-outline" size={22} color={TVKColors.yellow} />
-          </View>
-          <View className="flex-1">
-            <Text className="text-[16px] font-semibold text-white">{strings.home.askAi}</Text>
-            <Text className="mt-1 text-[13px] leading-[18px] text-white/72">
-              {strings.home.askAiSub}
-            </Text>
-          </View>
-          <Ionicons name="sparkles-outline" size={18} color={TVKColors.yellow} />
-        </TouchableOpacity>
-
-        <SectionTitle
-          title={strings.home.recentActivity}
-          action={strings.home.viewAll}
-          onAction={() => openRoute('/documents' as Href)}
-          className="mt-6"
-        />
-
-        {recentActivity.map((a, i) => (
-          <ActivityItem
-            key={i}
-            title={a.title}
-            subtitle={a.sub}
-            time={a.time}
-            icon={a.icon}
-            color={a.color}
-          />
-        ))}
-
-        <View
-          className="mt-3 rounded-panel border bg-white p-4"
-          style={[softPanelStyle, { borderColor: '#DDE4EC' }]}
-        >
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1 pr-3">
-              <Text className="text-[16px] font-semibold text-tvk-red">
-                {strings.home.focusTitle}
+        <View className="px-4 pt-4">
+          <View
+            className="rounded-[16px] border px-4 py-3"
+            style={{ borderColor: TVKColors.border, backgroundColor: TVKColors.white }}
+          >
+            <View className="flex-row items-center justify-between">
+              <Text className="text-[13px] font-semibold" style={{ color: TVKColors.textPrimary }}>
+                Citizen ID
               </Text>
-              <Text className="mt-1 text-[13px] leading-[18px] text-tvk-muted">
-                {strings.home.focusSub}
+              <Text className="text-[11px] font-medium" style={{ color: TVKColors.primary }}>
+                {CITIZEN.id}
               </Text>
             </View>
-            <Feather name="sunrise" size={20} color={TVKColors.primary} />
+            <Text className="mt-1 text-[12px] leading-[16px]" style={{ color: TVKColors.textSecondary }}>
+              Secure, unified identity with trusted service access and transparent updates.
+            </Text>
           </View>
         </View>
       </ScrollView>

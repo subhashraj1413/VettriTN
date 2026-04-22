@@ -10,8 +10,8 @@ export const translations = {
       tamil: 'தமிழ்',
       preferences: 'Preferences',
       theme: 'Theme',
-      light: 'Light',
-      dark: 'Dark',
+      classic: 'Classic',
+      modern: 'Modern',
       signOut: 'Sign Out',
     },
     routes: {
@@ -289,8 +289,8 @@ export const translations = {
       tamil: 'தமிழ்',
       preferences: 'அமைப்புகள்',
       theme: 'தீம்',
-      light: 'ஒளி',
-      dark: 'இருள்',
+      classic: 'பாரம்பரியம்',
+      modern: 'நவீனம்',
       signOut: 'வெளியேறு',
     },
     routes: {

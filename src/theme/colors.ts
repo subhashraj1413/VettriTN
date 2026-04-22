@@ -20,32 +20,32 @@ export const TVKColors = {
   accentDark:   '#C9A000',  // Text on yellow bg
   accentLight:  '#FFF8E1',  // Yellow chip backgrounds
 
-  // ─── Status Colors ───────────────────────────────────────────────
-  success:      '#2E7D32',
-  successLight: '#E8F5E9',
-  warning:      '#E65100',
-  warningLight: '#FFF3E0',
-  error:        '#B71C1C',
-  errorLight:   '#FFEBEE',
-  info:         '#1565C0',
-  infoLight:    '#E3F2FD',
-  purple:       '#4527A0',
-  purpleLight:  '#EDE7F6',
+  // ─── Semantic Status Tones (TVK-only palette) ───────────────────
+  success:      '#8B0000',  // maroon tone
+  successLight: '#FBE8E8',
+  warning:      '#C9A000',  // yellow-dark tone
+  warningLight: '#FFF6D9',
+  error:        '#740000',  // deep red tone
+  errorLight:   '#FBE8E8',
+  info:         '#9F0000',  // primary red tone
+  infoLight:    '#FBE8E8',
+  purple:       '#8B0000',  // mapped to maroon to avoid off-palette purple
+  purpleLight:  '#FBE8E8',
 
   // ─── Neutrals ────────────────────────────────────────────────────
   white:        '#FFFFFF',
   black:        '#000000',
-  background:   '#F2F4F8',
+  background:   '#F9F4EE',
   surface:      '#FFFFFF',
-  surfaceAlt:   '#F7F9FC',
-  border:       '#DDE3EA',
-  borderLight:  '#E9EEF5',
-  divider:      '#E6EBF2',
+  surfaceAlt:   '#FEF8F2',
+  border:       '#E3D4C5',
+  borderLight:  '#EFE4D8',
+  divider:      '#E9DDCF',
 
   // ─── Text ────────────────────────────────────────────────────────
-  textPrimary:   '#7F8895',
-  textSecondary: '#576172',
-  textTertiary:  '#7F8895',
+  textPrimary:   '#1A1A1A',
+  textSecondary: '#5C4D3C',
+  textTertiary:  '#7A6A58',
   textInverse:   '#FFFFFF',
   textOnYellow:  '#5D4500',  // Readable text on TVK yellow bg
   textOnRed:     '#FFFFFF',  // Text on TVK red

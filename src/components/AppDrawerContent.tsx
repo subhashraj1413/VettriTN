@@ -31,7 +31,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
   const { language, setLanguage, strings } = useAppLanguage();
   const { signOut } = useSession();
   const { mode, setMode, theme } = useTheme();
-  const isDark = mode === 'dark';
+  const isModern = mode === 'modern';
 
   const navItems: DrawerItem[] = [
     { label: strings.routes.home,       href: '/' as Href,           icon: 'home-outline',               activeIcon: 'home',               match: ['/', '/(tabs)'] },
@@ -57,7 +57,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
         <View className="flex-row items-center gap-2.5 mb-1.5">
           <View
             className="w-9 h-9 rounded-[10px] items-center justify-center"
-            style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+            style={{ backgroundColor: theme.headerChrome }}
           >
             <Ionicons name="shield-checkmark" size={20} color={theme.onAccent} />
           </View>
@@ -70,7 +70,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
         </View>
         <Text
           className="text-[13px] ml-[46px]"
-          style={{ color: 'rgba(255,255,255,0.7)' }}
+          style={{ color: theme.onAccent, opacity: 0.7 }}
         >
           {strings.drawer.subtitle}
         </Text>
@@ -110,7 +110,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
                   backgroundColor: active
                     ? `${theme.accent}18`
                     : isChat
-                      ? isDark ? 'rgba(255,200,0,0.10)' : 'rgba(196,30,58,0.07)'
+                      ? isModern ? 'rgba(255,200,0,0.10)' : 'rgba(139,0,0,0.07)'
                       : theme.surface,
                 }}
               >
@@ -194,23 +194,31 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
           </View>
         </View>
 
-        {/* 2. Dark / light theme toggle */}
+        {/* 2. Classic / Modern theme toggle */}
         <View className="flex-row items-center justify-between px-5 py-2.5">
           <View className="flex-row items-center gap-2.5">
-            <Ionicons
-              name={isDark ? 'moon-outline' : 'sunny-outline'}
-              size={18}
-              color={theme.secondaryText}
-            />
+            <View
+              className="w-8 h-8 rounded-full items-center justify-center border"
+              style={{
+                backgroundColor: isModern ? `${theme.accent}26` : theme.headerChrome,
+                borderColor: isModern ? `${theme.accent}66` : theme.border,
+              }}
+            >
+              <Ionicons
+                name={isModern ? 'color-wand-outline' : 'library-outline'}
+                size={16}
+                color={isModern ? theme.onAccent : theme.secondaryText}
+              />
+            </View>
             <Text className="text-[13px] font-medium" style={{ color: theme.primaryText }}>
-              {isDark ? strings.drawer.dark : strings.drawer.light}
+              {isModern ? strings.drawer.modern : strings.drawer.classic}
             </Text>
           </View>
           <Switch
-            value={isDark}
-            onValueChange={v => setMode(v ? 'dark' : 'light')}
+            value={isModern}
+            onValueChange={v => setMode(v ? 'modern' : 'classic')}
             trackColor={{ false: theme.border, true: `${theme.accent}CC` }}
-            thumbColor={isDark ? theme.accent : '#FFFFFF'}
+            thumbColor={isModern ? theme.accent : '#FFFFFF'}
             ios_backgroundColor={theme.border}
           />
         </View>
@@ -240,8 +248,8 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
           }}
           className="flex-row items-center gap-2.5 px-5 py-2.5"
         >
-          <Ionicons name="log-out-outline" size={18} color="#C62828" />
-          <Text className="text-[13px] font-semibold text-[#C62828]">
+          <Ionicons name="log-out-outline" size={18} color={theme.headerBackground} />
+          <Text className="text-[13px] font-semibold" style={{ color: theme.headerBackground }}>
             {strings.drawer.signOut}
           </Text>
         </TouchableOpacity>

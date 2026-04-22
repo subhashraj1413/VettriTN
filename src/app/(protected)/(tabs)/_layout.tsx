@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppLanguage } from "../../../i18n/LanguageProvider";
@@ -100,29 +100,36 @@ function getScreenOptions(name: TabKey, bottomInset: number) {
   return (
     strings: ReturnType<typeof useAppLanguage>["strings"],
     theme: ReturnType<typeof useTheme>["theme"],
-  ) => ({
-    title: strings.routes[routeKey],
-    headerShown: false,
-    tabBarShowLabel: false,
-    tabBarStyle: {
-      backgroundColor: theme.tabBar,
-      borderTopWidth: 0,
-      height: 54 + tabBarBottomPadding + 8,
-      paddingBottom: tabBarBottomPadding,
-      paddingTop: 8,
-      elevation: 0,
-      shadowOpacity: 0,
-    },
-    tabBarIcon: ({ focused }: { focused: boolean }) => (
-      <TabIcon
-        focused={focused}
-        icon={icon(focused, '#C9A000', "rgba(255,255,255,0.72)")}
-        label={strings.routes[routeKey]}
-        primaryText={'#C9A000'}
-        secondaryText="rgba(255,255,255,0.72)"
-      />
-    ),
-  });
+  ) => {
+    const inactiveColor =
+      theme.statusBarStyle === "dark-content"
+        ? "rgba(93,69,0,0.58)"
+        : "rgba(255,255,255,0.72)";
+
+    return {
+      title: strings.routes[routeKey],
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        backgroundColor: theme.tabBar,
+        borderTopWidth: 0,
+        height: 54 + tabBarBottomPadding + 8,
+        paddingBottom: tabBarBottomPadding,
+        paddingTop: 8,
+        elevation: 0,
+        shadowOpacity: 0,
+      },
+      tabBarIcon: ({ focused }: { focused: boolean }) => (
+        <TabIcon
+          focused={focused}
+          icon={icon(focused, theme.onAccent, inactiveColor)}
+          label={strings.routes[routeKey]}
+          primaryText={theme.onAccent}
+          secondaryText={inactiveColor}
+        />
+      ),
+    };
+  };
 }
 
 export default function TabsLayout() {

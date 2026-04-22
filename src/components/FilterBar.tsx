@@ -10,20 +10,10 @@ interface FilterBarProps<T extends string = string> {
   options: FilterOption<T>[];
   value: T;
   onChange: (value: T) => void;
-  /** Render in a full-width row instead of a scrollable strip */
   fullWidth?: boolean;
-  /** Extra className for the outer wrapper */
   className?: string;
 }
 
-/**
- * Reusable horizontal filter chip bar.
- *
- * - Scrollable by default (good for many options).
- * - Pass `fullWidth` for a non-scrolling flex row (3–4 options max).
- * - Active chip uses TVK primary colour; inactive uses surface background.
- * - All styles via NativeWind className.
- */
 function FilterBar<T extends string = string>({
   options,
   value,
@@ -33,21 +23,24 @@ function FilterBar<T extends string = string>({
 }: FilterBarProps<T>) {
   const chips = options.map(opt => {
     const active = opt.value === value;
+
     return (
       <TouchableOpacity
         key={opt.value}
         onPress={() => onChange(opt.value)}
-        activeOpacity={0.75}
+        activeOpacity={0.8}
         className={`
-          px-4 py-1.5 rounded-full border
+          rounded-full border px-4 py-1.5
           ${fullWidth ? 'flex-1 items-center' : ''}
           ${active
-            ? 'bg-tvk-primary-light border-tvk-primary'
-            : 'bg-tvk-background border-tvk-border'}
+            ? 'border-tvk-accent bg-tvk-accent-light'
+            : 'border-tvk-border bg-tvk-surface'}
         `}
       >
         <Text
-          className={`text-[12px] leading-[18px] ${active ? 'font-semibold text-tvk-primary' : 'font-medium text-tvk-text-secondary'}`}
+          className={`text-[12px] leading-[18px] ${
+            active ? 'font-semibold text-tvk-accent-dark' : 'font-medium text-tvk-text-secondary'
+          }`}
         >
           {opt.label}
         </Text>
@@ -56,19 +49,15 @@ function FilterBar<T extends string = string>({
   });
 
   if (fullWidth) {
-    return (
-      <View className={`flex-row gap-2 ${className}`}>
-        {chips}
-      </View>
-    );
+    return <View className={`flex-row gap-2 ${className}`}>{chips}</View>;
   }
 
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      className={`max-h-12 bg-tvk-surface border-b border-tvk-border ${className}`}
-      contentContainerClassName="px-4 py-2 gap-2"
+      className={`max-h-12 border-b border-tvk-border bg-tvk-surface ${className}`}
+      contentContainerClassName="gap-2 px-4 py-2"
     >
       {chips}
     </ScrollView>

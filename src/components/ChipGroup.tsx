@@ -11,17 +11,10 @@ interface ChipGroupProps<T extends string = string> {
   value: T;
   onChange: (value: T) => void;
   label?: string;
-  /** Wrap chips across multiple lines */
   wrap?: boolean;
   className?: string;
 }
 
-/**
- * Reusable chip selector group (single-select).
- *
- * Used for: category picker, priority selector, filter pills.
- * All layout + colours via NativeWind className.
- */
 function ChipGroup<T extends string = string>({
   options,
   value,
@@ -33,7 +26,7 @@ function ChipGroup<T extends string = string>({
   return (
     <View className={className}>
       {label ? (
-        <Text className="text-[11px] font-semibold uppercase tracking-wide text-tvk-text-secondary mb-2">
+        <Text className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-tvk-text-secondary">
           {label}
         </Text>
       ) : null}
@@ -41,20 +34,23 @@ function ChipGroup<T extends string = string>({
       <View className={`flex-row gap-2 ${wrap ? 'flex-wrap' : ''}`}>
         {options.map(opt => {
           const active = opt.value === value;
+
           return (
             <TouchableOpacity
               key={opt.value}
               onPress={() => onChange(opt.value)}
-              activeOpacity={0.75}
+              activeOpacity={0.8}
               className={`
-                px-3 py-1.5 rounded-full border
+                rounded-full border px-3 py-1.5
                 ${active
-                  ? 'bg-tvk-primary-light border-tvk-primary'
-                  : 'bg-tvk-background border-tvk-border'}
+                  ? 'border-tvk-accent bg-tvk-accent-light'
+                  : 'border-tvk-border bg-tvk-surface'}
               `}
             >
               <Text
-                className={`text-[12px] leading-[18px] ${active ? 'font-semibold text-tvk-primary' : 'text-tvk-text-secondary'}`}
+                className={`text-[12px] leading-[18px] ${
+                  active ? 'font-semibold text-tvk-accent-dark' : 'text-tvk-text-secondary'
+                }`}
               >
                 {opt.label}
               </Text>
