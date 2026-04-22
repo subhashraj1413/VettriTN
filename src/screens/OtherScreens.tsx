@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ScreenHeader from '../components/ScreenHeader';
+import DrawerMenuButton from '../components/DrawerMenuButton';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
 import { useTheme } from '../hooks/useTheme';
@@ -20,12 +21,10 @@ import { useAppLanguage } from '../i18n/LanguageProvider';
 
 export const CitizenIDScreen: React.FC = () => {
   const { strings } = useAppLanguage();
-  const { theme } = useTheme();
-  const insets = useSafeAreaInsets();
 
   return (
     <View className="flex-1 bg-tvk-background">
-      <ScreenHeader title={strings.citizenId.title} />
+      <ScreenHeader title={strings.citizenId.title} leftAction="auto" />
 
       <ScrollView contentContainerClassName="p-4">
         {/* ── Front ID card ───────────────────────────────────────────── */}
@@ -137,7 +136,6 @@ export const CitizenIDScreen: React.FC = () => {
 
 export const ServicesScreen: React.FC = () => {
   const { strings } = useAppLanguage();
-  const { theme } = useTheme();
 
   const categories = [
     { emoji: '📋', label: 'Certificates', color: TVKColors.primary,    bg: TVKColors.primaryLight  },
@@ -158,6 +156,7 @@ export const ServicesScreen: React.FC = () => {
       <ScreenHeader
         title={strings.services.title}
         subtitle={strings.services.subtitle}
+        leftAction="auto"
       />
 
       <ScrollView contentContainerClassName="p-4">
@@ -257,13 +256,11 @@ export const ProfileScreen: React.FC = () => {
       >
         {/* Drawer button — top-left */}
         <View className="w-full px-4 mb-4 items-start">
-          {/* DrawerMenuButton rendered inline to avoid double StatusBar */}
-          <TouchableOpacity
-            className="w-10 h-10 rounded-full items-center justify-center"
-            style={{ backgroundColor: theme.headerChrome }}
-          >
-            {/* chevron back or menu */}
-          </TouchableOpacity>
+          <DrawerMenuButton
+            color={theme.headerText}
+            backgroundColor={theme.headerChrome}
+            action="auto"
+          />
         </View>
 
         {/* Avatar */}

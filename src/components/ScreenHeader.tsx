@@ -18,6 +18,7 @@ interface ScreenHeaderProps {
   stats?: StatItem[];
   bottom?: React.ReactNode;
   className?: string;
+  leftAction?: 'menu' | 'back' | 'auto';
 }
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -26,6 +27,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   stats,
   bottom,
   className = '',
+  leftAction = 'menu',
 }) => {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
@@ -56,7 +58,11 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         className="flex-row items-center gap-3 px-5 pb-4"
         style={{ paddingTop: insets.top + 14 }}
       >
-        <DrawerMenuButton color={theme.headerText} backgroundColor={theme.headerChrome} />
+        <DrawerMenuButton
+          color={theme.headerText}
+          backgroundColor={theme.headerChrome}
+          action={leftAction}
+        />
 
         <View className="flex-1">
           <Text className="text-[20px] font-bold leading-7" style={{ color: theme.headerText }}>
