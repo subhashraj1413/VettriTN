@@ -162,7 +162,7 @@ const DocumentsScreen: React.FC = () => {
                 {doc.status === 'Due' && (
                   <TouchableOpacity
                     className="mt-1"
-                    onPress={() => Alert.alert('Payment', `Redirecting to payment for ${doc.name}...`)}
+                    onPress={() => router.push('/payments')}
                   >
                     <Text className="text-[12px] font-medium text-tvk-error">
                       {strings.documents.actions.payNow}

@@ -8,6 +8,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
+import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ScreenHeader from '../components/ScreenHeader';
 import DrawerMenuButton from '../components/DrawerMenuButton';
@@ -170,7 +171,11 @@ export const ServicesScreen: React.FC = () => {
               key={c.label}
               className="w-[47%] p-5 rounded-[14px] items-center gap-2 border border-black/5"
               style={{ backgroundColor: c.bg }}
-              onPress={() => Alert.alert(c.label, `Starting ${c.label} service request...`)}
+              onPress={() =>
+                c.label === 'Utilities'
+                  ? router.push('/payments')
+                  : Alert.alert(c.label, `Starting ${c.label} service request...`)
+              }
               activeOpacity={0.8}
             >
               <Text className="text-[28px]">{c.emoji}</Text>

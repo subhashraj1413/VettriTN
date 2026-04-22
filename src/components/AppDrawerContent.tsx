@@ -41,6 +41,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
     { label: strings.routes.schemes,    href: '/schemes' as Href,     icon: 'ribbon-outline',             activeIcon: 'ribbon',             match: ['/schemes'] },
     { label: strings.routes.citizenId,  href: '/citizen-id' as Href,  icon: 'card-outline',               activeIcon: 'card',               match: ['/citizen-id'] },
     { label: strings.routes.services,   href: '/services' as Href,    icon: 'grid-outline',               activeIcon: 'grid',               match: ['/services'] },
+    { label: strings.routes.payments,   href: '/payments' as Href,    icon: 'wallet-outline',             activeIcon: 'wallet',             match: ['/payments'] },
   ];
 
   return (

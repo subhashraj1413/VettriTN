@@ -22,6 +22,7 @@ export const translations = {
       schemes: 'Schemes',
       citizenId: 'Citizen ID',
       services: 'Services',
+      payments: 'Payments',
       profile: 'Profile',
     },
     home: {
@@ -301,6 +302,7 @@ export const translations = {
       schemes: 'திட்டங்கள்',
       citizenId: 'குடிமக்கள் அட்டை',
       services: 'சேவைகள்',
+      payments: 'கட்டணங்கள்',
       profile: 'சுயவிவரம்',
     },
     home: {

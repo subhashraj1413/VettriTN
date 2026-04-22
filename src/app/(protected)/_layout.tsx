@@ -60,6 +60,10 @@ export default function ProtectedLayout() {
         options={{ drawerLabel: strings.routes.services }}
       />
       <Drawer.Screen
+        name="payments"
+        options={{ drawerLabel: strings.routes.payments }}
+      />
+      <Drawer.Screen
         name="profile"
         options={{ drawerLabel: strings.routes.profile }}
       />

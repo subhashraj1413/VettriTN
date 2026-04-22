@@ -45,7 +45,7 @@ const HomeScreen: React.FC = () => {
     {
       title: 'Bill Payments',
       subtitle: 'Electricity, water, tax and transport dues',
-      href: '/services' as Href,
+      href: '/payments' as Href,
       icon: 'wallet-outline' as const,
       iconColor: TVKColors.primary,
       tint: TVKColors.primaryLight,
@@ -77,7 +77,7 @@ const HomeScreen: React.FC = () => {
   ] as const;
 
   const metrics = [
-    { label: 'Bills Due', value: '2', tone: TVKColors.primary, href: '/services' as Href },
+    { label: 'Bills Due', value: '2', tone: TVKColors.primary, href: '/payments' as Href },
     { label: 'IDs Linked', value: '4', tone: TVKColors.maroon, href: '/citizen-id' as Href },
     { label: 'Open Cases', value: '1', tone: TVKColors.accentDark, href: '/grievances' as Href },
   ] as const;
@@ -218,7 +218,7 @@ const HomeScreen: React.FC = () => {
               </View>
               <TouchableOpacity
                 className="rounded-[14px] px-3 py-3"
-                onPress={() => openRoute('/services' as Href)}
+                onPress={() => openRoute('/payments' as Href)}
                 activeOpacity={0.9}
                 style={{ backgroundColor: ctaBg }}
               >
